@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WoWSilicon - World of Warcraft Launcher for Apple Silicon Macs</title>
+    <meta name="title" content="WoWSilicon - World of Warcraft Launcher for Apple Silicon Macs">
+    <meta name="description"
+        content="WoWSilicon is a macOS launcher for running classic World of Warcraft clients on Apple Silicon. It patches CrossOver, installs RosettaX87 and libSiliconPatch, and manages addons and mods.">
+    <meta name="keywords"
+        content="WoWSilicon, World of Warcraft, WoW, Apple Silicon, M1, M2, M3, M4, Mac launcher, Vanilla, TBC, WotLK, Turtle WoW, Project Epoch, CrossOver, Wine, Rosetta 2, x87, SSE, libSiliconPatch, rosettax87, macOS">
+    <meta name="author" content="WoWSilicon">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#1f6feb">
+    <meta name="msapplication-TileColor" content="#0b1020">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://wowsilicon.github.io/">
+    <meta property="og:title" content="WoWSilicon - World of Warcraft Launcher for Apple Silicon Macs">
+    <meta property="og:description"
+        content="Patch and launch Vanilla, TBC, and WotLK-era World of Warcraft clients on Apple Silicon Macs with CrossOver, RosettaX87, libSiliconPatch, and DX9 translation support.">
+    <meta property="og:image" content="https://wowsilicon.github.io/Icon.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:site_name" content="WoWSilicon">
+    <meta property="og:locale" content="en_US">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://wowsilicon.github.io/">
+    <meta property="twitter:title" content="WoWSilicon - World of Warcraft Launcher for Apple Silicon Macs">
+    <meta property="twitter:description"
+        content="Patch and launch classic World of Warcraft clients on Apple Silicon Macs with CrossOver, RosettaX87, libSiliconPatch, and DX9 translation support.">
+    <meta property="twitter:image" content="https://wowsilicon.github.io/Icon.png">
+
+    <link rel="icon" type="image/png" href="Icon.png">
+    <link rel="apple-touch-icon" href="Icon.png">
+    <link rel="shortcut icon" type="image/png" href="Icon.png">
+    <link rel="canonical" href="https://wowsilicon.github.io/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.github.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <meta name="application-name" content="WoWSilicon">
+    <meta name="apple-mobile-web-app-title" content="WoWSilicon">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link href="./src/output.css" rel="stylesheet">
+    <style>
+        .font-display {
+            font-family: 'Cinzel', serif;
+        }
+
+        body {
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-page {
+            background:
+                radial-gradient(circle at 15% 10%, rgba(31, 111, 235, 0.28), transparent 30rem),
+                radial-gradient(circle at 85% 20%, rgba(194, 167, 91, 0.18), transparent 28rem),
+                linear-gradient(135deg, #070b14 0%, #0d1629 48%, #101318 100%);
+        }
+
+        .bg-accent {
+            background: linear-gradient(135deg, #2f81f7, #c2a75b);
+        }
+
+        .text-accent {
+            color: #8bbcff;
+        }
+
+        .text-gold {
+            color: #d6bd70;
+        }
+
+        .border-accent {
+            border-color: rgba(139, 188, 255, 0.35);
+        }
+
+        .panel {
+            background: rgba(5, 10, 20, 0.72);
+            border: 1px solid rgba(139, 188, 255, 0.18);
+        }
+
+        .panel-strong {
+            background: rgba(8, 15, 29, 0.88);
+            border: 1px solid rgba(214, 189, 112, 0.22);
+        }
+
+        .shadow-app {
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+        }
+
+        .glow {
+            filter: drop-shadow(0 0 18px rgba(47, 129, 247, 0.5));
+        }
+
+        .hero-shot {
+            max-height: min(58vh, 620px);
+            object-fit: contain;
+        }
+
+        .code-chip {
+            background: rgba(3, 7, 18, 0.85);
+            border: 1px solid rgba(139, 188, 255, 0.22);
+        }
+
+        a,
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-white bg-page">
+    <header class="container px-4 py-6 mx-auto sm:px-6">
+        <nav class="flex flex-col gap-4 justify-between items-center sm:flex-row">
+            <a href="/" class="flex items-center space-x-3">
+                <img src="Icon.png" alt="WoWSilicon icon" class="w-11 h-11 rounded-xl glow" width="512" height="512"
+                    decoding="async">
+                <span class="text-xl font-bold sm:text-2xl font-display text-gold">WoWSilicon</span>
+            </a>
+            <div class="flex flex-wrap gap-x-5 gap-y-2 justify-center text-sm sm:text-base">
+                <a href="#features" class="text-gray-300 transition-colors hover:text-accent">Features</a>
+                <a href="#download" class="text-gray-300 transition-colors hover:text-accent">Download</a>
+                <a href="#install" class="text-gray-300 transition-colors hover:text-accent">Installation</a>
+                <a href="https://github.com/tairasu/WoWSilicon"
+                    class="text-gray-300 transition-colors hover:text-accent">GitHub</a>
+                <a href="https://discord.gg/pwZD5zBwfD" target="_blank" rel="noopener noreferrer"
+                    class="text-gray-300 transition-colors hover:text-accent">Discord</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section
+            class="container grid gap-10 items-center px-4 pt-8 pb-12 mx-auto sm:px-6 lg:grid-cols-[0.86fr_1.14fr] lg:pt-14 lg:pb-20">
+            <div>
+                <img src="Icon.png" alt="WoWSilicon icon" class="mb-7 w-24 h-24 rounded-2xl glow" width="512"
+                    height="512" decoding="async">
+                <h1 class="mb-5 text-4xl font-bold leading-tight sm:text-5xl md:text-6xl font-display text-gold">
+                    WoWSilicon</h1>
+                <p class="mb-6 max-w-2xl text-xl leading-relaxed text-gray-200 sm:text-2xl">
+                    A focused macOS launcher for World of Warcraft from 2006-2010 on Apple Silicon Macs.
+                </p>
+                <p class="mb-8 max-w-2xl text-base leading-7 text-gray-400 sm:text-lg">
+                    WoWSilicon wires together CrossOver, RosettaX87, DX9 translation, and libSiliconPatch so older WoW
+                    clients can run on macOS.
+                </p>
+                <p class="mb-8 max-w-2xl text-base leading-7 text-gray-400 sm:text-lg">
+                    Say goodbye to dedicating a full Windows VM just to play old WoW. Run directly on macOS, save
+                    storage
+                    space, and avoid the extra virtualization layer that can hold performance back.
+                </p>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <button id="downloadBtn"
+                        class="px-6 py-3 font-semibold text-white rounded-lg transition-transform bg-accent hover:scale-[1.02] shadow-app">
+                        Download WoWSilicon
+                    </button>
+                    <a href="https://github.com/tairasu/WoWSilicon"
+                        class="px-6 py-3 font-semibold text-center rounded-lg border border-accent text-accent transition-colors hover:bg-white/10">
+                        View on GitHub
+                    </a>
+                    <a href="https://discord.gg/pwZD5zBwfD" target="_blank" rel="noopener noreferrer"
+                        class="px-6 py-3 font-semibold text-center rounded-lg border border-accent text-accent transition-colors hover:bg-white/10">
+                        Join Discord
+                    </a>
+                </div>
+                <p class="mt-5 text-sm text-gray-500" id="versionInfo">Loading latest version...</p>
+            </div>
+
+            <div class="rounded-lg p-3">
+                <img src="img/wowsilicon_preview.png" alt="WoWSilicon app dashboard" class="w-full rounded-md hero-shot"
+                    decoding="async">
+            </div>
+        </section>
+
+        <section class="container px-4 pb-14 mx-auto sm:px-6">
+            <div class="grid gap-4 mx-auto max-w-6xl md:grid-cols-4">
+                <div class="p-5 rounded-lg panel">
+                    <p class="text-sm uppercase tracking-wide text-gray-500">Supported</p>
+                    <p class="mt-2 text-xl font-semibold text-gold">Vanilla, TBC, WotLK</p>
+                </div>
+                <div class="p-5 rounded-lg panel">
+                    <p class="text-sm uppercase tracking-wide text-gray-500">Runtime</p>
+                    <p class="mt-2 text-xl font-semibold text-gold">RosettaX87 + DX9</p>
+                </div>
+                <div class="p-5 rounded-lg panel">
+                    <p class="text-sm uppercase tracking-wide text-gray-500">Optimization</p>
+                    <p class="mt-2 text-xl font-semibold text-gold">libSiliconPatch</p>
+                </div>
+                <div class="p-5 rounded-lg panel">
+                    <p class="text-sm uppercase tracking-wide text-gray-500">Management</p>
+                    <p class="mt-2 text-xl font-semibold text-gold">Addons + Mods</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="container px-4 py-14 mx-auto sm:px-6 sm:py-20">
+            <h2 class="mb-5 text-3xl font-bold text-center sm:text-4xl font-display text-gold">What WoWSilicon Does</h2>
+            <p class="mx-auto mb-10 max-w-3xl text-center leading-8 text-gray-300">
+                The launcher is meant to make the fragile parts of older Windows WoW clients repeatable: choose a
+                profile, patch CrossOver, patch the game folder, adjust options, and launch.
+            </p>
+            <div class="grid gap-5 mx-auto max-w-6xl md:grid-cols-2 lg:grid-cols-3">
+                <article class="p-6 rounded-lg panel">
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Version Profiles</h3>
+                    <p class="leading-7 text-gray-300">Built-in profiles for VanillaSilicon 1.12.1, BurningSilicon
+                        2.4.3, and WrathSilicon 3.3.5a, with custom profiles for any server variants.</p>
+                </article>
+                <article class="p-6 rounded-lg panel">
+                    <h3 class="mb-3 text-xl font-semibold text-accent">CrossOver Patching</h3>
+                    <p class="leading-7 text-gray-300">Creates a patched wineloader path and adjusts CrossOver runtime
+                        files needed by the RosettaX87 launch flow.</p>
+                </article>
+                <article class="p-6 rounded-lg panel">
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Game Folder Patching</h3>
+                    <p class="leading-7 text-gray-300">Installs winerosetta, d3d9, libDllLdr, RosettaX87 files, and
+                        optional libSiliconPatch into the selected client folder.</p>
+                </article>
+                <article class="p-6 rounded-lg panel">
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Addon Manager</h3>
+                    <p class="leading-7 text-gray-300">Install addons from Git URLs, update individual addons, update
+                        all, bulk import/export addon lists, and filter Git-managed addons.</p>
+                </article>
+                <article class="p-6 rounded-lg panel">
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Mod Manager</h3>
+                    <p class="leading-7 text-gray-300">Enable, disable, refresh, and remove DLL-style mods while keeping
+                        required runtime pieces protected.</p>
+                </article>
+                <article class="p-6 rounded-lg panel">
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Options Built In</h3>
+                    <p class="leading-7 text-gray-300">Configure graphics, cursor size, Retina mode, Option-as-Alt,
+                        realmlist, custom environment variables, terminal launch mode, and Metal HUD.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="runtime" class="container px-4 py-14 mx-auto sm:px-6 sm:py-20">
+            <div class="grid gap-8 mx-auto max-w-6xl lg:grid-cols-[0.9fr_1.1fr]">
+                <div>
+                    <h2 class="mb-5 text-3xl font-bold sm:text-4xl font-display text-gold">Why the Runtime Patch Matters
+                    </h2>
+                    <p class="mb-5 leading-8 text-gray-300">
+                        Classic WoW clients rely on old x86 behavior, including x87 floating-point instructions. On
+                        Apple Silicon, Rosetta 2 handles a lot well, but x87-heavy paths can be expensive compared with
+                        SSE-oriented code paths.
+                    </p>
+                    <p class="mb-5 leading-8 text-gray-300">
+                        WoWSilicon includes the libSiliconPatch work to hook into the game at runtime and reduce x87
+                        instruction usage where possible. In practical terms, it steers hot code toward SSE-friendly
+                        behavior, which Rosetta 2 tends to translate more efficiently.
+                    </p>
+                </div>
+                <div class="grid gap-4">
+                    <div class="p-6 rounded-lg panel-strong">
+                        <h3 class="mb-3 text-xl font-semibold text-accent">libSiliconPatch</h3>
+                        <p class="leading-7 text-gray-300">Replaces functions that use x87 and recompiles them to use
+                            SSE, which results in better performance on Apple Silicon.</p>
+                    </div>
+                    <div class="p-6 rounded-lg panel-strong">
+                        <h3 class="mb-3 text-xl font-semibold text-accent">RosettaX87</h3>
+                        <p class="leading-7 text-gray-300">Hooks Rosetta 2 directly and emits ARM instructions to
+                            accelerate x87 globally.</p>
+                    </div>
+                    <div class="p-6 rounded-lg panel-strong">
+                        <h3 class="mb-3 text-xl font-semibold text-accent">DX9 Translation</h3>
+                        <p class="leading-7 text-gray-300">WoWSilicon stages d3d9 and starts the game with
+                            DXVK/MoltenVK-related environment settings, including optional Metal HUD output for
+                            troubleshooting FPS.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container px-4 py-14 mx-auto sm:px-6 sm:py-20">
+            <div class="grid gap-8 mx-auto max-w-6xl lg:grid-cols-2">
+                <div class="p-7 rounded-lg panel">
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">Supported Clients</h2>
+                    <ul class="space-y-4 text-gray-300">
+                        <li><span class="font-semibold text-accent">VanillaSilicon</span> - WoW 1.12.1, vanilla-tweaks
+                            support, libSiliconPatch enabled by default.</li>
+                        <li><span class="font-semibold text-accent">BurningSilicon</span> - WoW 2.4.3, Rosetta patching
+                            and DX9 translation support.</li>
+                        <li><span class="font-semibold text-accent">WrathSilicon</span> - WoW 3.3.5a, libSiliconPatch
+                            enabled by default.</li>
+                        <li><span class="font-semibold text-accent">Custom profiles</span> - create additional profiles
+                            from the base versions for custom WoW clients or alternate folders.</li>
+                    </ul>
+                </div>
+                <div class="p-7 rounded-lg panel">
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">Requirements</h2>
+                    <ul class="space-y-4 text-gray-300">
+                        <li>Apple Silicon Mac, M1 or newer.</li>
+                        <li>macOS 15 or later.</li>
+                        <li>CrossOver 26 installed and opened at least once.</li>
+                        <li>An <strong>original</strong> World of Warcraft client folder with the game executable
+                            inside.</li>
+                        <li>Permission to modify the selected game folder and CrossOver app bundle.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="download" class="container px-4 py-14 mx-auto text-center sm:px-6 sm:py-20">
+            <div class="mx-auto max-w-4xl p-8 rounded-lg panel shadow-app">
+                <h2 class="mb-5 text-3xl font-bold sm:text-4xl font-display text-gold">Download WoWSilicon</h2>
+                <p class="mx-auto mb-8 max-w-2xl text-lg leading-8 text-gray-300">
+                    Download the latest release from GitHub, move it to Applications, then follow the setup guide below.
+                </p>
+                <button id="mainDownloadBtn"
+                    class="px-8 py-4 text-lg font-semibold text-white rounded-lg transition-transform bg-accent hover:scale-[1.02] shadow-app">
+                    Download Latest Release
+                </button>
+                <p class="mt-5 text-sm text-gray-400" id="downloadVersionInfo">Loading...</p>
+                <p class="mx-auto mt-5 max-w-2xl text-sm leading-6 text-gray-500">
+                    If macOS blocks the first launch for an unsigned build, remove the quarantine flag after moving the
+                    app to Applications.
+                </p>
+            </div>
+        </section>
+
+        <section id="install" class="container px-4 py-14 mx-auto sm:px-6 sm:py-20">
+            <div class="mx-auto max-w-4xl">
+                <h2 class="mb-5 text-3xl font-bold text-center sm:text-4xl font-display text-gold">Installation Guide
+                </h2>
+                <p class="mx-auto mb-12 max-w-2xl text-center text-lg leading-8 text-gray-300">
+                    These steps mirror the old TurtleSilicon setup flow, updated for WoWSilicon and the current patch
+                    stack.
+                </p>
+
+                <div class="space-y-6">
+                    <div class="p-6 rounded-lg panel">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
+                                1</div>
+                            <div>
+                                <h3 class="mb-2 text-xl font-semibold text-accent">Open the downloaded archive</h3>
+                                <p class="leading-7 text-gray-300">After downloading, open the WoWSilicon DMG or ZIP
+                                    from your Downloads folder. If it is a DMG, it will mount in Finder.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-lg panel">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
+                                2</div>
+                            <div>
+                                <h3 class="mb-2 text-xl font-semibold text-accent">Move WoWSilicon.app to Applications
+                                </h3>
+                                <p class="mb-3 leading-7 text-gray-300">Drag <code
+                                        class="px-2 py-1 rounded code-chip">WoWSilicon.app</code> into <code
+                                        class="px-2 py-1 rounded code-chip">/Applications</code>.</p>
+                                <p class="leading-7 text-gray-400">You can open Applications from Finder, or press
+                                    Cmd+Space, type <code class="px-2 py-1 rounded code-chip">/Applications</code>, and
+                                    open the folder.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-lg panel">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
+                                3</div>
+                            <div class="min-w-0 flex-1">
+                                <h3 class="mb-2 text-xl font-semibold text-accent">Remove security quarantine if needed
+                                </h3>
+                                <p class="mb-4 leading-7 text-gray-300">Unsigned builds may be blocked by Gatekeeper. If
+                                    macOS refuses to open the app, run this in Terminal after moving it to Applications:
+                                </p>
+                                <div class="flex flex-col gap-3 p-4 rounded-lg code-chip sm:flex-row sm:items-center">
+                                    <code
+                                        class="min-w-0 flex-1 text-sm text-green-300 break-all">xattr -cr /Applications/WoWSilicon.app</code>
+                                    <button onclick="copyToClipboard('xattr -cr /Applications/WoWSilicon.app', this)"
+                                        class="px-4 py-2 text-sm font-semibold text-white rounded bg-accent">Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-lg panel">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
+                                4</div>
+                            <div>
+                                <h3 class="mb-2 text-xl font-semibold text-accent">Run CrossOver once</h3>
+                                <p class="mb-3 leading-7 text-gray-300">Open CrossOver from Applications once, allow
+                                    macOS to open it, then quit it.</p>
+                                <p class="leading-7 text-gray-400">This lets CrossOver initialize its internal files
+                                    before WoWSilicon patches the wineloader path.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-lg panel">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
+                                5</div>
+                            <div>
+                                <h3 class="mb-2 text-xl font-semibold text-accent">Launch WoWSilicon</h3>
+                                <p class="leading-7 text-gray-300">Open WoWSilicon from Applications. If you used
+                                    TurtleSilicon before, WoWSilicon can migrate existing settings when it detects the
+                                    old support folder.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-lg panel">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
+                                6</div>
+                            <div>
+                                <h3 class="mb-2 text-xl font-semibold text-accent">Grant file access</h3>
+                                <p class="mb-3 leading-7 text-gray-300">When macOS asks for file access, allow it.
+                                    WoWSilicon needs access to the CrossOver app bundle and the game folder you select.
+                                </p>
+                                <p class="leading-7 text-gray-400">It only touches the paths you choose so it can copy
+                                    runtime DLLs, write config files, and apply or remove patches.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-lg panel">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
+                                7</div>
+                            <div>
+                                <h3 class="mb-2 text-xl font-semibold text-accent">Grant App Management access</h3>
+                                <p class="mb-3 leading-7 text-gray-300">When you click <span
+                                        class="font-semibold text-gold">Patch CrossOver</span>, macOS may request App
+                                    Management permission.</p>
+                                <p class="leading-7 text-gray-400">If the prompt does not appear, open System Settings >
+                                    Privacy & Security > App Management and enable WoWSilicon manually.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-lg panel">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
+                                8</div>
+                            <div>
+                                <h3 class="mb-2 text-xl font-semibold text-accent">Patch and play</h3>
+                                <ul class="space-y-2 leading-7 text-gray-300">
+                                    <li>Set your CrossOver path.</li>
+                                    <li>Select the WoW version profile you want to use.</li>
+                                    <li>Set your game folder.</li>
+                                    <li>Click Patch CrossOver, then Patch Game.</li>
+                                    <li>Adjust Options if needed, then click Play.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="container px-4 py-14 mx-auto sm:px-6 sm:py-20">
+            <div class="grid gap-8 mx-auto max-w-6xl lg:grid-cols-2">
+                <div class="p-7 rounded-lg panel">
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">Troubleshooting</h2>
+                    <ul class="space-y-4 leading-7 text-gray-300">
+                        <li><span class="font-semibold text-accent">CrossOver patch is not applied:</span> verify the
+                            CrossOver path and grant App Management permission.</li>
+                        <li><span class="font-semibold text-accent">Game patch is not applied:</span> make sure the
+                            selected folder contains WoW.exe or the expected client executable.</li>
+                        <li><span class="font-semibold text-accent">Vanilla tweaked executable is stale:</span> let
+                            WoWSilicon regenerate it when the build mismatch prompt appears.</li>
+                        <li><span class="font-semibold text-accent">Need logs:</span> enable Show Terminal in Options to
+                            launch through Terminal and keep output visible.</li>
+                    </ul>
+                </div>
+                <div class="p-7 rounded-lg panel">
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">Need Help?</h2>
+                    <p class="mb-4 leading-7 text-gray-300">If setup fails, include your selected WoW version, CrossOver
+                        version, macOS version, and the exact step that failed when opening an issue.</p>
+                    <div class="flex flex-col gap-3 sm:flex-row">
+                        <a href="https://discord.gg/pwZD5zBwfD" target="_blank" rel="noopener noreferrer"
+                            class="font-semibold text-accent hover:underline">Join the Discord</a>
+                        <a href="https://github.com/tairasu/WoWSilicon/issues"
+                            class="font-semibold text-accent hover:underline">Open a GitHub issue</a>
+                    </div>
+                    <p class="mt-4 leading-7 text-gray-400">The troubleshooting view inside WoWSilicon can also collect
+                        useful context before you report a problem.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container px-4 py-10 mx-auto sm:px-6">
+            <div class="mx-auto max-w-6xl p-7 rounded-lg panel">
+                <h2 class="mb-4 text-2xl font-bold font-display text-gold">Disclaimer</h2>
+                <p class="leading-7 text-gray-300">
+                    WoWSilicon is not advocating the use of any private server. The launcher is intended to help older
+                    World of Warcraft clients run on Apple Silicon hardware in an efficient and performant way. Users
+                    are responsible for how they use the software, and WoWSilicon is not liable for that use.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container px-4 py-10 mx-auto border-t border-white/10 sm:px-6">
+        <div class="flex flex-col gap-5 justify-between items-center text-center sm:flex-row sm:text-left">
+            <div class="flex items-center gap-3">
+                <img src="Icon.png" alt="WoWSilicon icon" class="w-8 h-8 rounded-lg" width="512" height="512"
+                    decoding="async">
+                <span class="font-semibold font-display text-gold">WoWSilicon</span>
+            </div>
+            <div class="flex flex-wrap gap-5 justify-center text-sm text-gray-400">
+                <a href="https://github.com/tairasu/WoWSilicon" class="hover:text-accent">GitHub</a>
+                <a href="https://github.com/tairasu/WoWSilicon/releases" class="hover:text-accent">Releases</a>
+                <a href="https://github.com/tairasu/WoWSilicon/issues" class="hover:text-accent">Issues</a>
+                <a href="https://discord.gg/pwZD5zBwfD" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-accent">Discord</a>
+            </div>
+        </div>
+        <p class="mt-6 text-center text-xs text-gray-600">MIT License © 2026 WoWSilicon</p>
+    </footer>
+
+    <script>
+        const repo = 'tairasu/WoWSilicon';
+        const fallbackUrl = `https://github.com/${repo}/releases/latest`;
+
+        function setDownloadTarget(url) {
+            document.getElementById('downloadBtn').onclick = () => window.open(url, '_blank');
+            document.getElementById('mainDownloadBtn').onclick = () => window.open(url, '_blank');
+        }
+
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied';
+                setTimeout(() => { button.textContent = originalText; }, 1800);
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                const originalText = button.textContent;
+                button.textContent = 'Copied';
+                setTimeout(() => { button.textContent = originalText; }, 1800);
+            });
+        }
+
+        async function fetchLatestRelease() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
+                if (!response.ok) throw new Error('GitHub release request failed');
+                const data = await response.json();
+                const asset = data.assets.find(item => /\.(dmg|zip)$/i.test(item.name));
+                if (!asset) throw new Error('No downloadable app archive found');
+
+                document.getElementById('versionInfo').textContent = `Latest version: ${data.tag_name}`;
+                document.getElementById('downloadVersionInfo').textContent = `${data.tag_name} - ${(asset.size / 1024 / 1024).toFixed(1)} MB`;
+                setDownloadTarget(asset.browser_download_url);
+            } catch (error) {
+                console.error('Error fetching release info:', error);
+                document.getElementById('versionInfo').textContent = 'Latest release available on GitHub';
+                document.getElementById('downloadVersionInfo').textContent = 'Open GitHub releases to download WoWSilicon';
+                setDownloadTarget(fallbackUrl);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchLatestRelease);
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', event => {
+                event.preventDefault();
+                const target = document.querySelector(anchor.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+
+</html>
