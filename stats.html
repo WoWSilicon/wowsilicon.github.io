@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WoWSilicon Stats</title>
+    <meta name="title" content="WoWSilicon Stats">
+    <meta name="description"
+        content="Anonymous aggregate usage statistics for WoWSilicon, including installs, daily active users, active sessions, WoW versions, macOS versions, and realmlist usage.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#1f6feb">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://wowsilicon.github.io/stats.html">
+    <meta property="og:title" content="WoWSilicon Stats">
+    <meta property="og:description" content="Anonymous aggregate WoWSilicon usage statistics.">
+    <meta property="og:image" content="https://wowsilicon.github.io/Icon.png">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/Icon.png">
+    <link rel="apple-touch-icon" href="/Icon.png">
+    <link rel="canonical" href="https://wowsilicon.github.io/stats.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://telemetry.wowsilicon.workers.dev">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="./src/output.css" rel="stylesheet">
+    <style>
+        .font-display {
+            font-family: 'Cinzel', serif;
+        }
+
+        body {
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-page {
+            background:
+                radial-gradient(circle at 15% 10%, rgba(31, 111, 235, 0.24), transparent 30rem),
+                radial-gradient(circle at 82% 18%, rgba(194, 167, 91, 0.16), transparent 26rem),
+                linear-gradient(135deg, #070b14 0%, #0d1629 48%, #101318 100%);
+        }
+
+        .bg-accent {
+            background: linear-gradient(135deg, #2f81f7, #c2a75b);
+        }
+
+        .text-accent {
+            color: #8bbcff;
+        }
+
+        .text-gold {
+            color: #d6bd70;
+        }
+
+        .panel {
+            background: rgba(5, 10, 20, 0.72);
+            border: 1px solid rgba(139, 188, 255, 0.18);
+        }
+
+        .panel-strong {
+            background: rgba(8, 15, 29, 0.88);
+            border: 1px solid rgba(214, 189, 112, 0.22);
+        }
+
+        .bar-track {
+            background: rgba(139, 188, 255, 0.12);
+        }
+
+        .bar-fill {
+            background: linear-gradient(90deg, #2f81f7, #d6bd70);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-white bg-page">
+    <header class="container px-4 py-6 mx-auto sm:px-6">
+        <nav class="flex flex-col gap-4 justify-between items-center sm:flex-row">
+            <a href="/" class="flex items-center gap-3">
+                <img src="Icon.png" alt="WoWSilicon icon" class="w-9 h-9 rounded-lg" width="512" height="512"
+                    decoding="async">
+                <span class="font-semibold font-display text-gold">WoWSilicon</span>
+            </a>
+            <div class="flex flex-wrap gap-x-5 gap-y-2 justify-center text-sm sm:text-base">
+                <a href="/" class="text-gray-300 transition-colors hover:text-accent">Home</a>
+                <a href="https://github.com/WoWSilicon/WoWSilicon"
+                    class="text-gray-300 transition-colors hover:text-accent">GitHub</a>
+                <a href="https://discord.gg/pwZD5zBwfD" target="_blank" rel="noopener noreferrer"
+                    class="text-gray-300 transition-colors hover:text-accent">Discord</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container px-4 pt-8 pb-10 mx-auto sm:px-6 lg:pt-14">
+            <div class="mx-auto max-w-6xl">
+                <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-accent">Anonymous telemetry</p>
+                <h1 class="mb-5 text-4xl font-bold leading-tight sm:text-5xl md:text-6xl font-display text-gold">
+                    WoWSilicon Stats</h1>
+                <p class="max-w-3xl text-lg leading-8 text-gray-300">
+                    These numbers come from users who opted in to anonymous usage statistics. The launcher does not send
+                    IP addresses, usernames, account names, character names, file paths, or hardware identifiers.
+                </p>
+                <p class="mt-4 text-sm text-gray-500" id="updatedAt">Loading stats...</p>
+            </div>
+        </section>
+
+        <section class="container px-4 pb-10 mx-auto sm:px-6">
+            <div class="grid gap-4 mx-auto max-w-6xl md:grid-cols-4">
+                <article class="p-5 rounded-lg panel-strong">
+                    <p class="text-sm uppercase tracking-wide text-gray-500">Anonymous installs</p>
+                    <p class="mt-2 text-3xl font-semibold text-gold" id="installsCount">-</p>
+                </article>
+                <article class="p-5 rounded-lg panel-strong">
+                    <p class="text-sm uppercase tracking-wide text-gray-500">Active now</p>
+                    <p class="mt-2 text-3xl font-semibold text-gold" id="activeCount">-</p>
+                </article>
+                <article class="p-5 rounded-lg panel-strong">
+                    <p class="text-sm uppercase tracking-wide text-gray-500">Active today</p>
+                    <p class="mt-2 text-3xl font-semibold text-gold" id="launchCount">-</p>
+                </article>
+                <article class="p-5 rounded-lg panel-strong">
+                    <p class="text-sm uppercase tracking-wide text-gray-500">Played today</p>
+                    <p class="mt-2 text-3xl font-semibold text-gold" id="wowStartCount">-</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="container px-4 py-8 mx-auto sm:px-6">
+            <div class="grid gap-6 mx-auto max-w-6xl lg:grid-cols-2">
+                <div class="p-6 rounded-lg panel">
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">WoW Versions Today</h2>
+                    <div class="space-y-4" id="wowVersions"></div>
+                </div>
+                <div class="p-6 rounded-lg panel">
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">WoWSilicon Versions Today</h2>
+                    <div class="space-y-4" id="appVersions"></div>
+                </div>
+                <div class="p-6 rounded-lg panel">
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">macOS Versions Today</h2>
+                    <div class="space-y-4" id="macosVersions"></div>
+                </div>
+                <div class="p-6 rounded-lg panel">
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">Renderers</h2>
+                    <div class="space-y-4" id="renderers"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container px-4 py-8 mx-auto sm:px-6">
+            <div class="mx-auto max-w-6xl p-6 rounded-lg panel">
+                <div class="flex flex-col gap-3 justify-between mb-5 sm:flex-row sm:items-end">
+                    <div>
+                        <h2 class="text-2xl font-bold font-display text-gold">Servers Today</h2>
+                        <p class="mt-2 leading-7 text-gray-400">Server names are mapped on the website. Unknown values
+                            are grouped as Other. Each install is counted once per server per day.</p>
+                    </div>
+                    <p class="text-sm text-gray-500">Top aggregate values only</p>
+                </div>
+                <div class="space-y-4" id="realmlists"></div>
+            </div>
+        </section>
+
+        <section class="container px-4 py-8 mx-auto sm:px-6">
+            <div class="mx-auto max-w-6xl p-6 rounded-lg panel">
+                <h2 class="mb-4 text-2xl font-bold font-display text-gold">Privacy</h2>
+                <p class="leading-7 text-gray-300">
+                    Telemetry is optional in the launcher. It is used for public aggregate stats only and can be turned
+                    off in Options at any time. The current client sends app version, WoW version, renderer, macOS
+                    version, and the configured realmlist value. Public charts count each anonymous install once per
+                    value per day, so reopening the launcher does not inflate the visible numbers.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container px-4 py-10 mx-auto border-t border-white/10 sm:px-6">
+        <div class="flex flex-col gap-5 justify-between items-center text-center sm:flex-row sm:text-left">
+            <div class="flex items-center gap-3">
+                <img src="Icon.png" alt="WoWSilicon icon" class="w-8 h-8 rounded-lg" width="512" height="512"
+                    decoding="async">
+                <span class="font-semibold font-display text-gold">WoWSilicon</span>
+            </div>
+            <div class="flex flex-wrap gap-5 justify-center text-sm text-gray-400">
+                <a href="/" class="hover:text-accent">Home</a>
+                <a href="https://github.com/WoWSilicon/WoWSilicon" class="hover:text-accent">GitHub</a>
+                <a href="https://github.com/WoWSilicon/WoWSilicon/issues" class="hover:text-accent">Issues</a>
+                <a href="https://discord.gg/pwZD5zBwfD" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-accent">Discord</a>
+            </div>
+        </div>
+        <p class="mt-6 text-center text-xs text-gray-600">GPLv3 License © 2026 WoWSilicon</p>
+    </footer>
+
+    <script>
+        const telemetryStatsUrl = 'https://telemetry.wowsilicon.workers.dev/stats.json';
+
+        const realmNames = {
+            'logon.warmane.com': 'Warmane',
+            'logon.turtle-wow.org': 'Turtle WoW',
+            'logon.project-epoch.net': 'Project Epoch'
+        };
+
+        function formatNumber(value) {
+            return Number(value || 0).toLocaleString();
+        }
+
+        function normalizeRows(rows, mapper = value => value) {
+            const grouped = new Map();
+            for (const row of rows || []) {
+                const label = mapper(row.value);
+                grouped.set(label, (grouped.get(label) || 0) + Number(row.count || 0));
+            }
+            return Array.from(grouped, ([value, count]) => ({ value, count }))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 10);
+        }
+
+        function mapRealm(value) {
+            if (!value) return 'Unknown';
+            return realmNames[value] || 'Other';
+        }
+
+        function renderRows(id, rows) {
+            const target = document.getElementById(id);
+            if (!rows || rows.length === 0) {
+                target.innerHTML = '<p class="text-gray-500">No data yet.</p>';
+                return;
+            }
+
+            const max = Math.max(...rows.map(row => row.count), 1);
+            target.innerHTML = rows.map(row => {
+                const width = Math.max((row.count / max) * 100, 3);
+                return `
+                    <div>
+                        <div class="flex justify-between gap-4 mb-2 text-sm">
+                            <span class="min-w-0 truncate text-gray-200">${escapeHTML(row.value)}</span>
+                            <span class="font-semibold text-gold">${formatNumber(row.count)}</span>
+                        </div>
+                        <div class="h-2 overflow-hidden rounded-full bar-track">
+                            <div class="h-full rounded-full bar-fill" style="width: ${width}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function escapeHTML(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        async function fetchStats() {
+            try {
+                const response = await fetch(telemetryStatsUrl, { cache: 'no-store' });
+                if (!response.ok) throw new Error('Stats request failed');
+                const stats = await response.json();
+                const dimensions = stats.unique_dimensions_today || stats.unique_dimensions || {};
+                const events = stats.unique_events_today || stats.unique_events || {};
+
+                document.getElementById('installsCount').textContent = formatNumber(stats.anonymous_installs);
+                document.getElementById('activeCount').textContent = formatNumber(stats.active_now);
+                document.getElementById('launchCount').textContent = formatNumber(events.launch);
+                document.getElementById('wowStartCount').textContent = formatNumber(events.wow_start);
+                document.getElementById('updatedAt').textContent =
+                    `Updated ${new Date(stats.generated_at).toLocaleString()} · active window ${stats.active_window_minutes || 30} minutes`;
+
+                renderRows('wowVersions', normalizeRows(dimensions.wow_version));
+                renderRows('appVersions', normalizeRows(dimensions.app_version));
+                renderRows('macosVersions', normalizeRows(dimensions.macos_version));
+                renderRows('renderers', normalizeRows(dimensions.renderer));
+                renderRows('realmlists', normalizeRows(dimensions.realmlist, mapRealm));
+            } catch (error) {
+                console.error('Error fetching telemetry stats:', error);
+                document.getElementById('updatedAt').textContent = 'Stats are currently unavailable.';
+                for (const id of ['wowVersions', 'appVersions', 'macosVersions', 'renderers', 'realmlists']) {
+                    document.getElementById(id).innerHTML = '<p class="text-gray-500">Unable to load data.</p>';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchStats);
+    </script>
+</body>
+
+</html>
