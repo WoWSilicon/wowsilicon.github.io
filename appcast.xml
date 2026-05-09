@@ -64,7 +64,7 @@ xattr -cr /Applications/WoWSilicon.app
 
 Supported versions: macOS 15, macOS 26
 ]]></description>
-            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.0/WoWSilicon-2.5.0.dmg" length="11876269" type="application/octet-stream" sparkle:edSignature="bbYXW78ugbB1jUWKv6CWrIw+HQR696QhGX6oY0ITP1JAVYc3Lla+7jUsXpR3IAVRwplFFSvEnU3PlsmGOw/ECA=="/>
+            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.0/WoWSilicon-2.5.0.dmg" length="11884309" type="application/octet-stream" sparkle:edSignature="050FRvOkaPyVKd7A8i3sB4dBq6Cln0GyUsm0GGLYQLa8DD9Bya1FoKMHtKOflucItllaHqDnDWPqBIUCRUbNDA=="/>
         </item>
     </channel>
 </rss>
