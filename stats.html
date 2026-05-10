@@ -118,28 +118,42 @@
                     <p class="mt-2 text-3xl font-semibold text-gold" id="activeCount">-</p>
                 </article>
                 <article class="p-5 rounded-lg panel-strong">
-                    <p class="text-sm uppercase tracking-wide text-gray-500">Active today</p>
+                    <p class="text-sm uppercase tracking-wide text-gray-500" id="launchLabel">Active today</p>
                     <p class="mt-2 text-3xl font-semibold text-gold" id="launchCount">-</p>
                 </article>
                 <article class="p-5 rounded-lg panel-strong">
-                    <p class="text-sm uppercase tracking-wide text-gray-500">Played today</p>
+                    <p class="text-sm uppercase tracking-wide text-gray-500" id="wowStartLabel">Played today</p>
                     <p class="mt-2 text-3xl font-semibold text-gold" id="wowStartCount">-</p>
                 </article>
+            </div>
+        </section>
+
+        <section class="container px-4 pb-4 mx-auto sm:px-6">
+            <div class="flex flex-wrap gap-2 mx-auto max-w-6xl" id="periodControls" aria-label="Stats period">
+                <button type="button" data-period="today"
+                    class="px-4 py-2 text-sm font-semibold rounded-md bg-white/10 text-white border border-white/10">Today</button>
+                <button type="button" data-period="month"
+                    class="px-4 py-2 text-sm font-semibold rounded-md text-gray-300 border border-white/10">This Month</button>
+                <button type="button" data-period="all"
+                    class="px-4 py-2 text-sm font-semibold rounded-md text-gray-300 border border-white/10">All Time</button>
             </div>
         </section>
 
         <section class="container px-4 py-8 mx-auto sm:px-6">
             <div class="grid gap-6 mx-auto max-w-6xl lg:grid-cols-2">
                 <div class="p-6 rounded-lg panel">
-                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">WoW Versions Today</h2>
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">WoW Versions <span
+                            class="periodTitle">Today</span></h2>
                     <div class="space-y-4" id="wowVersions"></div>
                 </div>
                 <div class="p-6 rounded-lg panel">
-                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">WoWSilicon Versions Today</h2>
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">WoWSilicon Versions <span
+                            class="periodTitle">Today</span></h2>
                     <div class="space-y-4" id="appVersions"></div>
                 </div>
                 <div class="p-6 rounded-lg panel">
-                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">macOS Versions Today</h2>
+                    <h2 class="mb-5 text-2xl font-bold font-display text-gold">macOS Versions <span
+                            class="periodTitle">Today</span></h2>
                     <div class="space-y-4" id="macosVersions"></div>
                 </div>
                 <div class="p-6 rounded-lg panel">
@@ -153,7 +167,8 @@
             <div class="mx-auto max-w-6xl p-6 rounded-lg panel">
                 <div class="flex flex-col gap-3 justify-between mb-5 sm:flex-row sm:items-end">
                     <div>
-                        <h2 class="text-2xl font-bold font-display text-gold">Servers Today</h2>
+                        <h2 class="text-2xl font-bold font-display text-gold">Servers <span
+                                class="periodTitle">Today</span></h2>
                         <p class="mt-2 leading-7 text-gray-400">Server names are mapped on the website. Unknown values
                             are grouped as Other. Each install is counted once per server per day.</p>
                     </div>
@@ -198,10 +213,48 @@
         const telemetryStatsUrl = 'https://telemetry.wowsilicon.workers.dev/stats.json';
 
         const realmNames = {
+            '51.210.230.10': 'Project Epoch',
+            'ashen-wow.space': 'AshenWoW',
+            'login.moonwell.su': 'Moonwell',
+            'login.twinstar-wow.com': 'Kronos',
+            'login3.twinstar-wow.com': 'Kronos',
+            'logon.chromiecraft.com': 'Chromiecraft',
+            'logon.project-epoch.net': 'Project Epoch',
+            'logon.smolderforge.com': 'Smolderforge',
+            'logon.turtle-server-eu.kz': 'TurtleWoW',
+            'logon.turtle-wow.org': 'TurtleWoW',
+            'logon.vanillaplus.org': 'VanillaPlus',
             'logon.warmane.com': 'Warmane',
-            'logon.turtle-wow.org': 'Turtle WoW',
-            'logon.project-epoch.net': 'Project Epoch'
+            'logon.wow-patagonia.com': 'WoW Patagonia',
+            'pvp.henhou.se': 'PvP Henhouse'
         };
+
+        const periods = {
+            today: {
+                label: 'Today',
+                launchLabel: 'Active today',
+                wowStartLabel: 'Played today',
+                eventsKey: 'unique_events_today',
+                dimensionsKey: 'unique_dimensions_today'
+            },
+            month: {
+                label: 'This Month',
+                launchLabel: 'Active this month',
+                wowStartLabel: 'Played this month',
+                eventsKey: 'unique_events_month',
+                dimensionsKey: 'unique_dimensions_month'
+            },
+            all: {
+                label: 'All Time',
+                launchLabel: 'Active all time',
+                wowStartLabel: 'Played all time',
+                eventsKey: 'unique_events',
+                dimensionsKey: 'unique_dimensions'
+            }
+        };
+
+        let latestStats = null;
+        let selectedPeriod = 'today';
 
         function formatNumber(value) {
             return Number(value || 0).toLocaleString();
@@ -256,26 +309,60 @@
                 .replace(/'/g, '&#039;');
         }
 
+        function periodData(stats, key) {
+            return stats[key] || {};
+        }
+
+        function setSelectedPeriod(period) {
+            if (!periods[period]) return;
+            selectedPeriod = period;
+            renderStats();
+        }
+
+        function updatePeriodControls() {
+            for (const button of document.querySelectorAll('#periodControls [data-period]')) {
+                const isSelected = button.dataset.period === selectedPeriod;
+                button.classList.toggle('bg-white/10', isSelected);
+                button.classList.toggle('text-white', isSelected);
+                button.classList.toggle('text-gray-300', !isSelected);
+                button.setAttribute('aria-pressed', String(isSelected));
+            }
+        }
+
+        function renderStats() {
+            if (!latestStats) return;
+
+            const period = periods[selectedPeriod];
+            const dimensions = periodData(latestStats, period.dimensionsKey);
+            const events = periodData(latestStats, period.eventsKey);
+
+            document.getElementById('installsCount').textContent = formatNumber(latestStats.anonymous_installs);
+            document.getElementById('activeCount').textContent = formatNumber(latestStats.active_now);
+            document.getElementById('launchLabel').textContent = period.launchLabel;
+            document.getElementById('wowStartLabel').textContent = period.wowStartLabel;
+            document.getElementById('launchCount').textContent = formatNumber(events.launch);
+            document.getElementById('wowStartCount').textContent = formatNumber(events.wow_start);
+
+            for (const element of document.querySelectorAll('.periodTitle')) {
+                element.textContent = period.label;
+            }
+            updatePeriodControls();
+
+            renderRows('wowVersions', normalizeRows(dimensions.wow_version));
+            renderRows('appVersions', normalizeRows(dimensions.app_version));
+            renderRows('macosVersions', normalizeRows(dimensions.macos_version));
+            renderRows('renderers', normalizeRows(dimensions.renderer));
+            renderRows('realmlists', normalizeRows(dimensions.realmlist, mapRealm));
+        }
+
         async function fetchStats() {
             try {
                 const response = await fetch(telemetryStatsUrl, { cache: 'no-store' });
                 if (!response.ok) throw new Error('Stats request failed');
-                const stats = await response.json();
-                const dimensions = stats.unique_dimensions_today || stats.unique_dimensions || {};
-                const events = stats.unique_events_today || stats.unique_events || {};
-
-                document.getElementById('installsCount').textContent = formatNumber(stats.anonymous_installs);
-                document.getElementById('activeCount').textContent = formatNumber(stats.active_now);
-                document.getElementById('launchCount').textContent = formatNumber(events.launch);
-                document.getElementById('wowStartCount').textContent = formatNumber(events.wow_start);
+                latestStats = await response.json();
                 document.getElementById('updatedAt').textContent =
-                    `Updated ${new Date(stats.generated_at).toLocaleString()} · active window ${stats.active_window_minutes || 30} minutes`;
-
-                renderRows('wowVersions', normalizeRows(dimensions.wow_version));
-                renderRows('appVersions', normalizeRows(dimensions.app_version));
-                renderRows('macosVersions', normalizeRows(dimensions.macos_version));
-                renderRows('renderers', normalizeRows(dimensions.renderer));
-                renderRows('realmlists', normalizeRows(dimensions.realmlist, mapRealm));
+                    `Updated ${new Date(latestStats.generated_at).toLocaleString()} · active window ${latestStats.active_window_minutes || 30} minutes`;
+                renderStats();
             } catch (error) {
                 console.error('Error fetching telemetry stats:', error);
                 document.getElementById('updatedAt').textContent = 'Stats are currently unavailable.';
@@ -285,7 +372,12 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', fetchStats);
+        document.addEventListener('DOMContentLoaded', () => {
+            for (const button of document.querySelectorAll('#periodControls [data-period]')) {
+                button.addEventListener('click', () => setSelectedPeriod(button.dataset.period));
+            }
+            fetchStats();
+        });
     </script>
 </body>
 
