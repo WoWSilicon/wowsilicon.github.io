@@ -175,6 +175,12 @@
                     <p class="text-sm text-gray-500">Top aggregate values only</p>
                 </div>
                 <div class="space-y-4" id="realmlists"></div>
+                <div id="realmlistsFooter" class="mt-8 text-center hidden">
+                    <button type="button" id="showMoreRealms"
+                        class="px-6 py-2 text-sm font-semibold rounded-md border border-accent/30 text-accent transition-colors hover:bg-accent/10">
+                        Show all servers
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -270,6 +276,7 @@
 
         let latestStats = null;
         let selectedPeriod = 'today';
+        let showAllRealms = false;
 
         function formatNumber(value) {
             return Number(value || 0).toLocaleString();
@@ -282,8 +289,7 @@
                 grouped.set(label, (grouped.get(label) || 0) + Number(row.count || 0));
             }
             return Array.from(grouped, ([value, count]) => ({ value, count }))
-                .sort((a, b) => b.count - a.count)
-                .slice(0, 10);
+                .sort((a, b) => b.count - a.count);
         }
 
         function mapRealm(value) {
@@ -331,6 +337,7 @@
         function setSelectedPeriod(period) {
             if (!periods[period]) return;
             selectedPeriod = period;
+            showAllRealms = false; // Reset when changing period
             renderStats();
         }
 
@@ -363,11 +370,21 @@
             }
             updatePeriodControls();
 
-            renderRows('wowVersions', normalizeRows(dimensions.wow_version));
-            renderRows('appVersions', normalizeRows(dimensions.app_version));
-            renderRows('macosVersions', normalizeRows(dimensions.macos_version));
-            renderRows('renderers', normalizeRows(dimensions.renderer));
-            renderRows('realmlists', normalizeRows(dimensions.realmlist, mapRealm));
+            renderRows('wowVersions', normalizeRows(dimensions.wow_version).slice(0, 10));
+            renderRows('appVersions', normalizeRows(dimensions.app_version).slice(0, 10));
+            renderRows('macosVersions', normalizeRows(dimensions.macos_version).slice(0, 10));
+            renderRows('renderers', normalizeRows(dimensions.renderer).slice(0, 10));
+
+            const realmRows = normalizeRows(dimensions.realmlist, mapRealm);
+            const displayRealms = showAllRealms ? realmRows : realmRows.slice(0, 10);
+            renderRows('realmlists', displayRealms);
+
+            const footer = document.getElementById('realmlistsFooter');
+            if (realmRows.length > 10 && !showAllRealms) {
+                footer.classList.remove('hidden');
+            } else {
+                footer.classList.add('hidden');
+            }
         }
 
         async function fetchStats() {
@@ -391,6 +408,10 @@
             for (const button of document.querySelectorAll('#periodControls [data-period]')) {
                 button.addEventListener('click', () => setSelectedPeriod(button.dataset.period));
             }
+            document.getElementById('showMoreRealms').addEventListener('click', () => {
+                showAllRealms = true;
+                renderStats();
+            });
             fetchStats();
         });
     </script>
