@@ -6,6 +6,38 @@
         <description>Release feed for WoWSilicon.</description>
         <language>en</language>
         <item>
+            <title>2.5.2</title>
+            <pubDate>Fri, 22 May 2026 14:13:02 +0000</pubDate>
+            <link>https://wowsilicon.github.io/</link>
+            <sparkle:version>20502</sparkle:version>
+            <sparkle:shortVersionString>2.5.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[# WoWSilicon 2.5.2
+
+## WoWSilicon
+
+- Increased size of the Options popup
+- Expanded support for custom launchers
+- Fixed process stalling on read-only file systems
+- Ensures `gxResolution` is present in `Config.wtf` when patching
+
+## libSiliconPatch
+
+- Disabled problematic particle hooks that could cause glitches and crashes on some clients
+- Reduced binary size
+
+As always, drag it into your Applications directory and run:
+
+```sh
+xattr -cr /Applications/WoWSilicon.app
+```
+
+Supported versions: macOS 15, macOS 26
+]]></description>
+            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.2/WoWSilicon-2.5.2.dmg" length="11714641" type="application/octet-stream" sparkle:edSignature="b2JRRFq5dJvnmS1EGFVKBeCLl8MNXBQr6JR1a6WBpyW7sZ+EN09hHBSd3qEivK+uG+6pFSn+HFyTQJwEIQGcCg=="/>
+        </item>
+        <item>
             <title>2.5.1</title>
             <pubDate>Sun, 10 May 2026 04:58:25 +0000</pubDate>
             <link>https://wowsilicon.github.io/</link>
