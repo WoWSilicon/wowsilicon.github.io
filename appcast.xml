@@ -6,6 +6,28 @@
         <description>Release feed for WoWSilicon.</description>
         <language>en</language>
         <item>
+            <title>2.5.4</title>
+            <pubDate>Sun, 07 Jun 2026 02:39:59 +0000</pubDate>
+            <link>https://wowsilicon.github.io/</link>
+            <sparkle:version>20504</sparkle:version>
+            <sparkle:shortVersionString>2.5.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[## WoWSilicon
+
+- WrathSilicon based clients are now categorized as high performance
+- fixed a wine dll override that caused some launchers to behave unexpectedly when using "open launcher"
+- troubleshooting debug logs now include the app version
+
+## libSiliconPatch
+
+- 50 new hooks for 3.3.5a clients which increases FPS by an additional 15%
+
+Supported versions: macOS 15, macOS 26
+]]></description>
+            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.4/WoWSilicon-2.5.4.dmg" length="11765957" type="application/octet-stream" sparkle:edSignature="pckdAQkhj6BIwIn65LO5uP+/jo+XCKoTMlelfdXMb0PKCnYXLLtpohQ8bMZ6PmlT9hDFsSSpBanVz6p4LGVxBg=="/>
+        </item>
+        <item>
             <title>2.5.3</title>
             <pubDate>Fri, 22 May 2026 14:48:13 +0000</pubDate>
             <link>https://wowsilicon.github.io/</link>
@@ -60,47 +82,6 @@ xattr -cr /Applications/WoWSilicon.app
 Supported versions: macOS 15, macOS 26
 ]]></description>
             <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.2/WoWSilicon-2.5.2.dmg" length="11714641" type="application/octet-stream" sparkle:edSignature="b2JRRFq5dJvnmS1EGFVKBeCLl8MNXBQr6JR1a6WBpyW7sZ+EN09hHBSd3qEivK+uG+6pFSn+HFyTQJwEIQGcCg=="/>
-        </item>
-        <item>
-            <title>2.5.1</title>
-            <pubDate>Sun, 10 May 2026 04:58:25 +0000</pubDate>
-            <link>https://wowsilicon.github.io/</link>
-            <sparkle:version>20501</sparkle:version>
-            <sparkle:shortVersionString>2.5.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# WoWSilicon 2.5.1 
-
-## WoWSilicon
-
-- Checks if game path is actually a client
-
-## Dependencies
-
-- Added a Dependencies tab in the options.
-- Added one-click setup for the Microsoft Visual C++ 2022 runtime.
-- The runtime is installed into the shared Wine prefix using the patched CrossOver binaries.
-- Added Git detection for the addon manager.
-- Added a Git install prompt when Git is missing and users open or use the addon manager.
-
-## Addons
-
-- Addon installs and updates now fail more clearly when Git is missing.
-- Users can install Git from WoWSilicon instead of having addon actions silently fail.
-
-## Telemetry
-
-- Updated anonymous telemetry to support monthly public stats.
-
-As always, drag it into your Applications directory and run:
-
-```sh
-xattr -cr /Applications/WoWSilicon.app
-```
-
-Supported versions: macOS 15, macOS 26
-]]></description>
-            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.1/WoWSilicon-2.5.1.dmg" length="11956404" type="application/octet-stream" sparkle:edSignature="b2h5q4/2AkGxKTWFYVU4ANC/dhav9p86Bi+aYKM60Uv05k+a32smtdLOr23IlvO8SRXIkb8hTbve67jibxpFCA=="/>
         </item>
         <item>
             <title>2.5.0</title>
