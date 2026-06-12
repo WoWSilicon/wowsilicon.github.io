@@ -6,6 +6,23 @@
         <description>Release feed for WoWSilicon.</description>
         <language>en</language>
         <item>
+            <title>2.5.5</title>
+            <pubDate>Fri, 12 Jun 2026 00:50:24 +0000</pubDate>
+            <link>https://wowsilicon.github.io/</link>
+            <sparkle:version>20505</sparkle:version>
+            <sparkle:shortVersionString>2.5.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[## libSiliconPatch
+
+- fixed a camera bug causing uninteded clipping and collisions
+- clouds are now rendering again
+
+Supported versions: macOS 15, macOS 26
+]]></description>
+            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.5/WoWSilicon-2.5.5.dmg" length="11768939" type="application/octet-stream" sparkle:edSignature="MO7yfAHPDf9XVBCH2dHm7aj0XAB1uxjZ7KAy5ADweXRqCLAuOXG1xOYiwo7Cqo8zYCDFZ5GzABmLZavWt2pgDw=="/>
+        </item>
+        <item>
             <title>2.5.4</title>
             <pubDate>Sun, 07 Jun 2026 02:39:59 +0000</pubDate>
             <link>https://wowsilicon.github.io/</link>
@@ -50,38 +67,6 @@ xattr -cr /Applications/WoWSilicon.app
 Supported versions: macOS 15, macOS 26
 ]]></description>
             <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.3/WoWSilicon-2.5.3.dmg" length="11742437" type="application/octet-stream" sparkle:edSignature="m1S5vYQMsk4zEVNSp+YCTnTXHYTnP+mUHHpJ+Ul+IQ+b4gK8SmQi3qTLGGetRvGm3+SEgbt0RgO/y8O3oWfjDw=="/>
-        </item>
-        <item>
-            <title>2.5.2</title>
-            <pubDate>Fri, 22 May 2026 14:13:02 +0000</pubDate>
-            <link>https://wowsilicon.github.io/</link>
-            <sparkle:version>20502</sparkle:version>
-            <sparkle:shortVersionString>2.5.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# WoWSilicon 2.5.2
-
-## WoWSilicon
-
-- Increased size of the Options popup
-- Expanded support for custom launchers
-- Fixed process stalling on read-only file systems
-- Ensures `gxResolution` is present in `Config.wtf` when patching
-
-## libSiliconPatch
-
-- Disabled problematic particle hooks that could cause glitches and crashes on some clients
-- Reduced binary size
-
-As always, drag it into your Applications directory and run:
-
-```sh
-xattr -cr /Applications/WoWSilicon.app
-```
-
-Supported versions: macOS 15, macOS 26
-]]></description>
-            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.2/WoWSilicon-2.5.2.dmg" length="11714641" type="application/octet-stream" sparkle:edSignature="b2JRRFq5dJvnmS1EGFVKBeCLl8MNXBQr6JR1a6WBpyW7sZ+EN09hHBSd3qEivK+uG+6pFSn+HFyTQJwEIQGcCg=="/>
         </item>
         <item>
             <title>2.5.0</title>
