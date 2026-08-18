@@ -6,6 +6,59 @@
         <description>Release feed for WoWSilicon.</description>
         <language>en</language>
         <item>
+            <title>3.0.0</title>
+            <pubDate>Tue, 18 Aug 2026 09:32:19 +0000</pubDate>
+            <link>https://wowsilicon.github.io/</link>
+            <sparkle:version>30000</sparkle:version>
+            <sparkle:shortVersionString>3.0.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[WoWSilicon now ships with its own Wine runtime. CrossOver is no longer required to install, configure, or play supported games.
+
+## Standalone Wine Runtime
+
+- Added a bundled Wine runtime, replacing the previous CrossOver dependency.
+- Added Wine Mono installation to the Dependencies section.
+- Added a confirmation prompt before deleting the shared Wine prefix.
+
+## Graphics
+
+- Added MTLd3D, a new graphics backend that translates Direct3D 9 directly to Metal, thanks to the work of [athei](https://github.com/athei/mtld3d).
+- Added HDR support when using MTLd3D.
+- D9VK remains available as the default graphics backend.
+
+## x87 Translation
+
+- Updated `rosettax87_jit` to the latest version, with performance improvements and support for macOS Golden Gate 27.
+- Added [x87sidecar](https://github.com/athei/x87sidecar) as an additional x87 translation option alongside `rosettax87_jit`.
+
+## Profiles and Launching
+
+- Added experimental support for creating non-WoW profiles for 32-bit Direct3D 9 games.
+- Users can now select any executable, improving support for clients that do not use the `WoW.exe` filename.
+
+## User Interface and Process Management
+
+- Improved interface elements to make controls more intuitive and folder paths easier to open and navigate.
+- Added Wine process monitoring to the Force Quit control, making it easier to see when Wine processes are still running.
+
+## Addon Manager
+
+- Updated the addon manager to support nested addons, similar to GitAddonsManager.
+
+As always, drag WoWSilicon into your Applications directory and run:
+
+```sh
+xattr -cr /Applications/WoWSilicon.app
+```
+
+Or use the updater within the app itself if you already have a previous version installed.
+
+Supported versions: macOS 15, macOS 26, macOS 27
+]]></description>
+            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v3.0.0/WoWSilicon-3.0.0.dmg" length="150417967" type="application/octet-stream" sparkle:edSignature="e0QATDXDyeth/6HFe5lGIy78ZnMPVjggtv0yfIizqQuqBc37PPaATEbCzjh3ueCDf/L26UPXFYcoGc4P/TS3Dw=="/>
+        </item>
+        <item>
             <title>2.5.5</title>
             <pubDate>Fri, 12 Jun 2026 00:50:24 +0000</pubDate>
             <link>https://wowsilicon.github.io/</link>
@@ -43,30 +96,6 @@ Supported versions: macOS 15, macOS 26
 Supported versions: macOS 15, macOS 26
 ]]></description>
             <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.4/WoWSilicon-2.5.4.dmg" length="11765957" type="application/octet-stream" sparkle:edSignature="pckdAQkhj6BIwIn65LO5uP+/jo+XCKoTMlelfdXMb0PKCnYXLLtpohQ8bMZ6PmlT9hDFsSSpBanVz6p4LGVxBg=="/>
-        </item>
-        <item>
-            <title>2.5.3</title>
-            <pubDate>Fri, 22 May 2026 14:48:13 +0000</pubDate>
-            <link>https://wowsilicon.github.io/</link>
-            <sparkle:version>20503</sparkle:version>
-            <sparkle:shortVersionString>2.5.3</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# WoWSilicon 2.5.3
-
-## WoWSilicon
-
-- Fixed a regression in 2.5.2 where patching could overwrite `Config.wtf` with a single line if the file used a non-UTF-8 encoding. This also caused repeated macOS prompts for access to removable volumes.
-
-As always, drag it into your Applications directory and run:
-
-```sh
-xattr -cr /Applications/WoWSilicon.app
-```
-
-Supported versions: macOS 15, macOS 26
-]]></description>
-            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.3/WoWSilicon-2.5.3.dmg" length="11742437" type="application/octet-stream" sparkle:edSignature="m1S5vYQMsk4zEVNSp+YCTnTXHYTnP+mUHHpJ+Ul+IQ+b4gK8SmQi3qTLGGetRvGm3+SEgbt0RgO/y8O3oWfjDw=="/>
         </item>
         <item>
             <title>2.5.0</title>
