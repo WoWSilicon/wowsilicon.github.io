@@ -6,6 +6,20 @@
         <description>Release feed for WoWSilicon.</description>
         <language>en</language>
         <item>
+            <title>3.0.1</title>
+            <pubDate>Tue, 18 Aug 2026 16:25:43 +0000</pubDate>
+            <link>https://wowsilicon.github.io/</link>
+            <sparkle:version>30001</sparkle:version>
+            <sparkle:shortVersionString>3.0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[- Fixed the bundled `rosettax87_jit` version
+- Removed x87 translation from helper processes, which caused issues with patching
+- Added permission checks to Troubleshooting
+]]></description>
+            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v3.0.1/WoWSilicon-3.0.1.dmg" length="150462562" type="application/octet-stream" sparkle:edSignature="Njl8tvZlmrbrgVusiceD5eF61KeoIF6IfaTYbBEpL59XxsOM5qfIHg0uhQZRekjSh2M3qKvllgJ0jLly0nPzBw=="/>
+        </item>
+        <item>
             <title>3.0.0</title>
             <pubDate>Tue, 18 Aug 2026 09:32:19 +0000</pubDate>
             <link>https://wowsilicon.github.io/</link>
@@ -74,28 +88,6 @@ Supported versions: macOS 15, macOS 26, macOS 27
 Supported versions: macOS 15, macOS 26
 ]]></description>
             <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.5/WoWSilicon-2.5.5.dmg" length="11768939" type="application/octet-stream" sparkle:edSignature="MO7yfAHPDf9XVBCH2dHm7aj0XAB1uxjZ7KAy5ADweXRqCLAuOXG1xOYiwo7Cqo8zYCDFZ5GzABmLZavWt2pgDw=="/>
-        </item>
-        <item>
-            <title>2.5.4</title>
-            <pubDate>Sun, 07 Jun 2026 02:39:59 +0000</pubDate>
-            <link>https://wowsilicon.github.io/</link>
-            <sparkle:version>20504</sparkle:version>
-            <sparkle:shortVersionString>2.5.4</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
-            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[## WoWSilicon
-
-- WrathSilicon based clients are now categorized as high performance
-- fixed a wine dll override that caused some launchers to behave unexpectedly when using "open launcher"
-- troubleshooting debug logs now include the app version
-
-## libSiliconPatch
-
-- 50 new hooks for 3.3.5a clients which increases FPS by an additional 15%
-
-Supported versions: macOS 15, macOS 26
-]]></description>
-            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.4/WoWSilicon-2.5.4.dmg" length="11765957" type="application/octet-stream" sparkle:edSignature="pckdAQkhj6BIwIn65LO5uP+/jo+XCKoTMlelfdXMb0PKCnYXLLtpohQ8bMZ6PmlT9hDFsSSpBanVz6p4LGVxBg=="/>
         </item>
         <item>
             <title>2.5.0</title>
