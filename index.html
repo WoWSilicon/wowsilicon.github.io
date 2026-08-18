@@ -7,9 +7,9 @@
     <title>WoWSilicon - World of Warcraft Launcher for Apple Silicon Macs</title>
     <meta name="title" content="WoWSilicon - World of Warcraft Launcher for Apple Silicon Macs">
     <meta name="description"
-        content="WoWSilicon is a macOS launcher for running classic World of Warcraft clients on Apple Silicon. It patches CrossOver, installs RosettaX87 and libSiliconPatch, and manages addons and mods.">
+        content="WoWSilicon is a standalone macOS launcher for classic World of Warcraft and 32-bit Direct3D 9 games on Apple Silicon, with bundled Wine, D9VK, MTLd3D, and accelerated x87 translation.">
     <meta name="keywords"
-        content="WoWSilicon, World of Warcraft, WoW, Apple Silicon, M1, M2, M3, M4, Mac launcher, Vanilla, TBC, WotLK, Turtle WoW, Project Epoch, CrossOver, Wine, Rosetta 2, x87, SSE, libSiliconPatch, rosettax87, macOS">
+        content="WoWSilicon, World of Warcraft, WoW, Apple Silicon, M1, M2, M3, M4, Mac launcher, Vanilla, TBC, WotLK, Turtle WoW, Project Epoch, Wine, D9VK, MTLd3D, Metal, HDR, Rosetta 2, x87sidecar, x87, SSE, libSiliconPatch, rosettax87, Direct3D 9, macOS">
     <meta name="author" content="WoWSilicon">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#1f6feb">
@@ -19,7 +19,7 @@
     <meta property="og:url" content="https://wowsilicon.github.io/">
     <meta property="og:title" content="WoWSilicon - World of Warcraft Launcher for Apple Silicon Macs">
     <meta property="og:description"
-        content="Patch and launch Vanilla, TBC, and WotLK-era World of Warcraft clients on Apple Silicon Macs with CrossOver, RosettaX87, libSiliconPatch, and DX9 translation support.">
+        content="Launch Vanilla, TBC, and WotLK-era World of Warcraft clients on Apple Silicon Macs with bundled Wine, D9VK or MTLd3D, and accelerated x87 translation.">
     <meta property="og:image" content="https://wowsilicon.github.io/Icon.png">
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
@@ -31,7 +31,7 @@
     <meta property="twitter:url" content="https://wowsilicon.github.io/">
     <meta property="twitter:title" content="WoWSilicon - World of Warcraft Launcher for Apple Silicon Macs">
     <meta property="twitter:description"
-        content="Patch and launch classic World of Warcraft clients on Apple Silicon Macs with CrossOver, RosettaX87, libSiliconPatch, and DX9 translation support.">
+        content="Launch classic World of Warcraft clients on Apple Silicon Macs with bundled Wine, D9VK or MTLd3D, and accelerated x87 translation.">
     <meta property="twitter:image" content="https://wowsilicon.github.io/Icon.png">
 
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -113,6 +113,11 @@
             border: 1px solid rgba(139, 188, 255, 0.22);
         }
 
+        .release-badge {
+            display: inline-block;
+            letter-spacing: 0.04em;
+        }
+
         a,
         button {
             cursor: pointer;
@@ -143,14 +148,17 @@
             <div>
                 <img src="Icon.png" alt="WoWSilicon icon" class="mb-7 w-24 h-24 rounded-2xl glow" width="512"
                     height="512" decoding="async">
+                <p class="release-badge px-4 py-2 mb-5 text-sm font-semibold rounded-lg panel-strong text-accent">
+                    WoWSilicon 3.0 · Standalone runtime
+                </p>
                 <h1 class="mb-5 text-4xl font-bold leading-tight sm:text-5xl md:text-6xl font-display text-gold">
                     WoWSilicon</h1>
                 <p class="mb-6 max-w-2xl text-xl leading-relaxed text-gray-200 sm:text-2xl">
-                    A focused macOS launcher for World of Warcraft from 2006-2010 on Apple Silicon Macs.
+                    Launch classic World of Warcraft on Apple Silicon—without CrossOver.
                 </p>
                 <p class="mb-8 max-w-2xl text-base leading-7 text-gray-400 sm:text-lg">
-                    WoWSilicon wires together CrossOver, RosettaX87, DX9 translation, and libSiliconPatch so older WoW
-                    clients can run on macOS.
+                    WoWSilicon 3.0 bundles its own Wine runtime, D9VK and MTLd3D graphics backends, accelerated x87
+                    translation, and the tools needed to manage older game clients from one app.
                 </p>
                 <p class="mb-8 max-w-2xl text-base leading-7 text-gray-400 sm:text-lg">
                     Say goodbye to dedicating a full Windows VM just to play old WoW. Run directly on macOS, save
@@ -188,15 +196,15 @@
                 </div>
                 <div class="p-5 rounded-lg panel">
                     <p class="text-sm uppercase tracking-wide text-gray-500">Runtime</p>
-                    <p class="mt-2 text-xl font-semibold text-gold">RosettaX87 + DX9</p>
+                    <p class="mt-2 text-xl font-semibold text-gold">Bundled Wine 11</p>
                 </div>
                 <div class="p-5 rounded-lg panel">
-                    <p class="text-sm uppercase tracking-wide text-gray-500">Optimization</p>
-                    <p class="mt-2 text-xl font-semibold text-gold">libSiliconPatch</p>
+                    <p class="text-sm uppercase tracking-wide text-gray-500">Graphics</p>
+                    <p class="mt-2 text-xl font-semibold text-gold">D9VK + MTLd3D</p>
                 </div>
                 <div class="p-5 rounded-lg panel">
-                    <p class="text-sm uppercase tracking-wide text-gray-500">Management</p>
-                    <p class="mt-2 text-xl font-semibold text-gold">Addons + Mods</p>
+                    <p class="text-sm uppercase tracking-wide text-gray-500">x87 Translation</p>
+                    <p class="mt-2 text-xl font-semibold text-gold">JIT + Sidecar</p>
                 </div>
             </div>
         </section>
@@ -204,39 +212,50 @@
         <section id="features" class="container px-4 py-14 mx-auto sm:px-6 sm:py-20">
             <h2 class="mb-5 text-3xl font-bold text-center sm:text-4xl font-display text-gold">What WoWSilicon Does</h2>
             <p class="mx-auto mb-10 max-w-3xl text-center leading-8 text-gray-300">
-                The launcher is meant to make the fragile parts of older Windows WoW clients repeatable: choose a
-                profile, patch CrossOver, patch the game folder, adjust options, and launch.
+                Choose a profile or executable, patch the game folder, select your graphics and x87 backends, and
+                launch. The Wine runtime and translators are already included.
             </p>
             <div class="grid gap-5 mx-auto max-w-6xl md:grid-cols-2 lg:grid-cols-3">
                 <article class="p-6 rounded-lg panel">
                     <h3 class="mb-3 text-xl font-semibold text-accent">Version Profiles</h3>
                     <p class="leading-7 text-gray-300">Built-in profiles for VanillaSilicon 1.12.1, BurningSilicon
-                        2.4.3, and WrathSilicon 3.3.5a, with custom profiles for any server variants.</p>
+                        2.4.3, and WrathSilicon 3.3.5a, plus custom profiles and experimental profiles for other 32-bit
+                        Direct3D 9 games.</p>
                 </article>
                 <article class="p-6 rounded-lg panel">
-                    <h3 class="mb-3 text-xl font-semibold text-accent">CrossOver Patching</h3>
-                    <p class="leading-7 text-gray-300">Creates a patched wineloader path and adjusts CrossOver runtime
-                        files needed by the RosettaX87 launch flow.</p>
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Standalone Wine Runtime</h3>
+                    <p class="leading-7 text-gray-300">Ships with a purpose-built Wine runtime. CrossOver and a
+                        separate Wine installation are no longer required.</p>
                 </article>
                 <article class="p-6 rounded-lg panel">
                     <h3 class="mb-3 text-xl font-semibold text-accent">Game Folder Patching</h3>
-                    <p class="leading-7 text-gray-300">Installs winerosetta, d3d9, libDllLdr, RosettaX87 files, and
-                        optional libSiliconPatch into the selected client folder.</p>
+                    <p class="leading-7 text-gray-300">Installs the appropriate Direct3D 9 and WoW-specific runtime
+                        files while keeping generic game profiles limited to the required d3d9.dll.</p>
                 </article>
                 <article class="p-6 rounded-lg panel">
-                    <h3 class="mb-3 text-xl font-semibold text-accent">Addon Manager</h3>
-                    <p class="leading-7 text-gray-300">Install addons from Git URLs, update individual addons, update
-                        all, bulk import/export addon lists, and filter Git-managed addons.</p>
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Two Graphics Backends</h3>
+                    <p class="leading-7 text-gray-300">Use D9VK for Vulkan-based translation or MTLd3D for direct
+                        Direct3D 9-to-Metal rendering, including optional HDR.</p>
                 </article>
                 <article class="p-6 rounded-lg panel">
-                    <h3 class="mb-3 text-xl font-semibold text-accent">Mod Manager</h3>
-                    <p class="leading-7 text-gray-300">Enable, disable, refresh, and remove DLL-style mods while keeping
-                        required runtime pieces protected.</p>
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Flexible x87 Translation</h3>
+                    <p class="leading-7 text-gray-300">Choose between rosettax87_jit and x87sidecar per profile, or
+                        disable accelerated x87 translation for troubleshooting.</p>
                 </article>
                 <article class="p-6 rounded-lg panel">
-                    <h3 class="mb-3 text-xl font-semibold text-accent">Options Built In</h3>
-                    <p class="leading-7 text-gray-300">Configure graphics, cursor size, Retina mode, Option-as-Alt,
-                        realmlist, custom environment variables, terminal launch mode, and Metal HUD.</p>
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Addons and Mods</h3>
+                    <p class="leading-7 text-gray-300">Install nested addon repositories, update managed addons, and
+                        enable or remove DLL-style mods while protecting required runtime files.</p>
+                </article>
+                <article class="p-6 rounded-lg panel">
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Process Monitoring</h3>
+                    <p class="leading-7 text-gray-300">See when Wine processes are active and use Force Quit when a
+                        game or helper process remains open.</p>
+                </article>
+                <article class="p-6 rounded-lg panel">
+                    <h3 class="mb-3 text-xl font-semibold text-accent">Dependencies Built In</h3>
+                    <p class="leading-7 text-gray-300">Install Wine Mono, Microsoft Visual C++ 2022, and Git from the
+                        Dependencies view when a client or addon needs them.</p>
                 </article>
             </div>
         </section>
@@ -244,7 +263,7 @@
         <section id="runtime" class="container px-4 py-14 mx-auto sm:px-6 sm:py-20">
             <div class="grid gap-8 mx-auto max-w-6xl lg:grid-cols-[0.9fr_1.1fr]">
                 <div>
-                    <h2 class="mb-5 text-3xl font-bold sm:text-4xl font-display text-gold">Why the Runtime Patch Matters
+                    <h2 class="mb-5 text-3xl font-bold sm:text-4xl font-display text-gold">Why x87 Translation Matters
                     </h2>
                     <p class="mb-5 leading-8 text-gray-300">
                         Classic WoW clients rely on old x86 behavior, including x87 floating-point instructions. On
@@ -252,9 +271,9 @@
                         SSE-oriented code paths.
                     </p>
                     <p class="mb-5 leading-8 text-gray-300">
-                        WoWSilicon includes the libSiliconPatch work to hook into the game at runtime and reduce x87
-                        instruction usage where possible. In practical terms, it steers hot code toward SSE-friendly
-                        behavior, which Rosetta 2 tends to translate more efficiently.
+                        WoWSilicon lets each profile use rosettax87_jit, x87sidecar, or no accelerated translator.
+                        Supported WoW clients can also use libSiliconPatch to replace selected hot paths with
+                        SSE-friendly implementations.
                     </p>
                 </div>
                 <div class="grid gap-4">
@@ -264,15 +283,19 @@
                             SSE, which results in better performance on Apple Silicon.</p>
                     </div>
                     <div class="p-6 rounded-lg panel-strong">
-                        <h3 class="mb-3 text-xl font-semibold text-accent">RosettaX87</h3>
-                        <p class="leading-7 text-gray-300">Hooks Rosetta 2 directly and emits ARM instructions to
-                            accelerate x87 globally.</p>
+                        <h3 class="mb-3 text-xl font-semibold text-accent">rosettax87_jit</h3>
+                        <p class="leading-7 text-gray-300">Hooks Rosetta 2 and emits ARM instructions to accelerate x87
+                            translation, with support for current macOS releases.</p>
                     </div>
                     <div class="p-6 rounded-lg panel-strong">
-                        <h3 class="mb-3 text-xl font-semibold text-accent">DX9 Translation</h3>
-                        <p class="leading-7 text-gray-300">WoWSilicon stages d3d9 and starts the game with
-                            DXVK/MoltenVK-related environment settings, including optional Metal HUD output for
-                            troubleshooting FPS.</p>
+                        <h3 class="mb-3 text-xl font-semibold text-accent">x87sidecar</h3>
+                        <p class="leading-7 text-gray-300">Runs accelerated x87 translation in an isolated helper
+                            process as an alternative to rosettax87_jit.</p>
+                    </div>
+                    <div class="p-6 rounded-lg panel-strong">
+                        <h3 class="mb-3 text-xl font-semibold text-accent">D9VK or MTLd3D</h3>
+                        <p class="leading-7 text-gray-300">Choose Vulkan-based D9VK or the Metal-native MTLd3D backend
+                            per profile. Both are bundled with WoWSilicon.</p>
                     </div>
                 </div>
             </div>
@@ -291,6 +314,8 @@
                             enabled by default.</li>
                         <li><span class="font-semibold text-accent">Custom profiles</span> - create additional profiles
                             from the base versions for custom WoW clients or alternate folders.</li>
+                        <li><span class="font-semibold text-accent">Non-WoW game</span> - experimental support for other
+                            32-bit Direct3D 9 games using a selected executable and d3d9.dll only.</li>
                     </ul>
                 </div>
                 <div class="p-7 rounded-lg panel">
@@ -298,10 +323,8 @@
                     <ul class="space-y-4 text-gray-300">
                         <li>Apple Silicon Mac, M1 or newer.</li>
                         <li>macOS 15 or later.</li>
-                        <li>CrossOver 26 installed and opened at least once.</li>
-                        <li>An <strong>original</strong> World of Warcraft client folder with the game executable
-                            inside.</li>
-                        <li>Permission to modify the selected game folder and CrossOver app bundle.</li>
+                        <li>A supported World of Warcraft client or experimental 32-bit Direct3D 9 executable.</li>
+                        <li>Permission to read and modify the selected game folder.</li>
                     </ul>
                 </div>
             </div>
@@ -330,8 +353,8 @@
                 <h2 class="mb-5 text-3xl font-bold text-center sm:text-4xl font-display text-gold">Installation Guide
                 </h2>
                 <p class="mx-auto mb-12 max-w-2xl text-center text-lg leading-8 text-gray-300">
-                    These steps mirror the old TurtleSilicon setup flow, updated for WoWSilicon and the current patch
-                    stack.
+                    WoWSilicon includes the runtime it needs. Install the app, choose a profile or executable, and
+                    patch the selected game folder.
                 </p>
 
                 <div class="space-y-6">
@@ -394,11 +417,11 @@
                                 class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
                                 4</div>
                             <div>
-                                <h3 class="mb-2 text-xl font-semibold text-accent">Run CrossOver once</h3>
-                                <p class="mb-3 leading-7 text-gray-300">Open CrossOver from Applications once, allow
-                                    macOS to open it, then quit it.</p>
-                                <p class="leading-7 text-gray-400">This lets CrossOver initialize its internal files
-                                    before WoWSilicon patches the wineloader path.</p>
+                                <h3 class="mb-2 text-xl font-semibold text-accent">Launch and choose a profile</h3>
+                                <p class="mb-3 leading-7 text-gray-300">Open WoWSilicon and select a built-in WoW
+                                    profile, create a custom profile, or choose the experimental Non-WoW game option.</p>
+                                <p class="leading-7 text-gray-400">Select the game executable when prompted and allow
+                                    macOS to access its folder. Existing 2.5.5 profiles are migrated automatically.</p>
                             </div>
                         </div>
                     </div>
@@ -409,59 +432,13 @@
                                 class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
                                 5</div>
                             <div>
-                                <h3 class="mb-2 text-xl font-semibold text-accent">Launch WoWSilicon</h3>
-                                <p class="leading-7 text-gray-300">Open WoWSilicon from Applications. If you used
-                                    TurtleSilicon before, WoWSilicon can migrate existing settings when it detects the
-                                    old support folder.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-6 rounded-lg panel">
-                        <div class="flex gap-4">
-                            <div
-                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
-                                6</div>
-                            <div>
-                                <h3 class="mb-2 text-xl font-semibold text-accent">Grant file access</h3>
-                                <p class="mb-3 leading-7 text-gray-300">When macOS asks for file access, allow it.
-                                    WoWSilicon needs access to the CrossOver app bundle and the game folder you select.
-                                </p>
-                                <p class="leading-7 text-gray-400">It only touches the paths you choose so it can copy
-                                    runtime DLLs, write config files, and apply or remove patches.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-6 rounded-lg panel">
-                        <div class="flex gap-4">
-                            <div
-                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
-                                7</div>
-                            <div>
-                                <h3 class="mb-2 text-xl font-semibold text-accent">Grant App Management access</h3>
-                                <p class="mb-3 leading-7 text-gray-300">When you click <span
-                                        class="font-semibold text-gold">Patch CrossOver</span>, macOS may request App
-                                    Management permission.</p>
-                                <p class="leading-7 text-gray-400">If the prompt does not appear, open System Settings >
-                                    Privacy & Security > App Management and enable WoWSilicon manually.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-6 rounded-lg panel">
-                        <div class="flex gap-4">
-                            <div
-                                class="flex-shrink-0 flex justify-center items-center w-10 h-10 font-bold text-white rounded-full bg-accent">
-                                8</div>
-                            <div>
                                 <h3 class="mb-2 text-xl font-semibold text-accent">Patch and play</h3>
                                 <ul class="space-y-2 leading-7 text-gray-300">
-                                    <li>Set your CrossOver path.</li>
-                                    <li>Select the WoW version profile you want to use.</li>
-                                    <li>Set your game folder.</li>
-                                    <li>Click Patch CrossOver, then Patch Game.</li>
-                                    <li>Adjust Options if needed, then click Play.</li>
+                                    <li>Confirm the selected profile and executable.</li>
+                                    <li>Click Patch to install the required game files.</li>
+                                    <li>Choose D9VK or MTLd3D and your preferred x87 translator in Options.</li>
+                                    <li>Install optional dependencies only if your client needs them.</li>
+                                    <li>Click Play.</li>
                                 </ul>
                             </div>
                         </div>
@@ -476,20 +453,24 @@
                 <div class="p-7 rounded-lg panel">
                     <h2 class="mb-5 text-2xl font-bold font-display text-gold">Troubleshooting</h2>
                     <ul class="space-y-4 leading-7 text-gray-300">
-                        <li><span class="font-semibold text-accent">CrossOver patch is not applied:</span> verify the
-                            CrossOver path and grant App Management permission.</li>
                         <li><span class="font-semibold text-accent">Game patch is not applied:</span> make sure the
-                            selected folder contains WoW.exe or the expected client executable.</li>
+                            selected executable exists and its folder is writable.</li>
+                        <li><span class="font-semibold text-accent">Graphics problems:</span> switch between D9VK and
+                            MTLd3D in Options to identify backend-specific issues.</li>
+                        <li><span class="font-semibold text-accent">Launch problems:</span> try the other x87 translator
+                            and install Wine Mono or Visual C++ only when the client requires it.</li>
+                        <li><span class="font-semibold text-accent">Wine remains active:</span> use the process indicator
+                            and Force Quit control to close remaining Wine processes.</li>
                         <li><span class="font-semibold text-accent">Vanilla tweaked executable is stale:</span> let
                             WoWSilicon regenerate it when the build mismatch prompt appears.</li>
-                        <li><span class="font-semibold text-accent">Need logs:</span> enable Show Terminal in Options to
-                            launch through Terminal and keep output visible.</li>
+                        <li><span class="font-semibold text-accent">Need logs:</span> generate a debug log from
+                            Troubleshooting or enable Show Terminal in Options.</li>
                     </ul>
                 </div>
                 <div class="p-7 rounded-lg panel">
                     <h2 class="mb-5 text-2xl font-bold font-display text-gold">Need Help?</h2>
-                    <p class="mb-4 leading-7 text-gray-300">If setup fails, include your selected WoW version, CrossOver
-                        version, macOS version, and the exact step that failed when opening an issue.</p>
+                    <p class="mb-4 leading-7 text-gray-300">If setup fails, include your macOS version, selected profile,
+                        graphics backend, x87 translator, debug log, and the exact step that failed.</p>
                     <div class="flex flex-col gap-3 sm:flex-row">
                         <a href="https://discord.gg/pwZD5zBwfD" target="_blank" rel="noopener noreferrer"
                             class="font-semibold text-accent hover:underline">Join the Discord</a>
