@@ -169,8 +169,9 @@
                     <div>
                         <h2 class="text-2xl font-bold font-display text-gold">Servers <span
                                 class="periodTitle">Today</span></h2>
-                        <p class="mt-2 leading-7 text-gray-400">Server names are mapped on the website. Unknown values
-                            are grouped as Other. Each install is counted once per server per day.</p>
+                        <p class="mt-2 leading-7 text-gray-400">Server names are mapped on the website. Unrecognized
+                            public endpoints are grouped as Other; local addresses are excluded. Each install is counted
+                            once per server per day.</p>
                     </div>
                     <p class="text-sm text-gray-500">Top aggregate values only</p>
                 </div>
@@ -306,6 +307,7 @@
             const grouped = new Map();
             for (const row of rows || []) {
                 const label = mapper(row.value);
+                if (label === null) continue;
                 grouped.set(label, (grouped.get(label) || 0) + Number(row.count || 0));
             }
             return Array.from(grouped, ([value, count]) => ({ value, count }))
@@ -314,7 +316,30 @@
 
         function mapRealm(value) {
             if (!value) return 'Unknown';
+            if (isLocalRealm(value)) return null;
             return realmNames[value] || 'Other';
+        }
+
+        function isLocalRealm(value) {
+            const raw = String(value).trim().toLowerCase();
+            if (raw === '::1' || raw.startsWith('fe80:')) return true;
+
+            const host = raw.replace(/:\d+$/, '');
+            if (host === 'localhost' || host === 'nas' ||
+                host.endsWith('.local') || host.endsWith('.lan') || host.endsWith('.home') ||
+                host.endsWith('.internal') || host.endsWith('.ts.net')) return true;
+
+            const octets = host.split('.');
+            if (octets.length !== 4 || octets.some(octet => !/^\d+$/.test(octet) || Number(octet) > 255)) {
+                return false;
+            }
+
+            const [first, second] = octets.map(Number);
+            return first === 10 || first === 127 ||
+                (first === 169 && second === 254) ||
+                (first === 172 && second >= 16 && second <= 31) ||
+                (first === 192 && second === 168) ||
+                (first === 100 && second >= 64 && second <= 127);
         }
 
         function renderRows(id, rows) {
