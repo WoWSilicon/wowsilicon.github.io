@@ -72,6 +72,55 @@
         .bar-fill {
             background: linear-gradient(90deg, #2f81f7, #d6bd70);
         }
+
+        .stats-select, .stats-date {
+            color: #f3f4f6;
+            background: #111d32;
+            border: 1px solid rgba(139, 188, 255, 0.3);
+            border-radius: 0.375rem;
+            padding: 0.55rem 0.75rem;
+        }
+
+        .stats-select:focus-visible, .stats-date:focus-visible, #periodControls button:focus-visible {
+            outline: 2px solid #d6bd70;
+            outline-offset: 2px;
+        }
+
+        .stats-select:disabled, .stats-date:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .history-chart {
+            display: flex;
+            align-items: end;
+            gap: 0.5rem;
+            min-height: 14rem;
+            border-bottom: 1px solid rgba(139, 188, 255, 0.3);
+            overflow-x: auto;
+        }
+
+        .history-column {
+            flex: 0 0 1.5rem;
+            height: 12rem;
+            display: flex;
+            align-items: end;
+        }
+
+        .history-bar {
+            width: 100%;
+            min-height: 2px;
+            padding: 0;
+            border: 0;
+            border-radius: 3px 3px 0 0;
+            background: linear-gradient(0deg, #2f81f7, #d6bd70);
+            cursor: pointer;
+        }
+
+        .history-bar:hover, .history-bar:focus-visible {
+            filter: brightness(1.3);
+            outline: 2px solid #fff;
+        }
     </style>
 </head>
 
@@ -129,13 +178,46 @@
         </section>
 
         <section class="container px-4 pb-4 mx-auto sm:px-6">
-            <div class="flex flex-wrap gap-2 mx-auto max-w-6xl" id="periodControls" aria-label="Stats period">
+            <div class="flex flex-wrap items-center gap-2 mx-auto max-w-6xl" id="periodControls" aria-label="Stats period">
                 <button type="button" data-period="today"
                     class="px-4 py-2 text-sm font-semibold rounded-md bg-white/10 text-white border border-white/10">Today</button>
                 <button type="button" data-period="month"
                     class="px-4 py-2 text-sm font-semibold rounded-md text-gray-300 border border-white/10">This Month</button>
                 <button type="button" data-period="all"
                     class="px-4 py-2 text-sm font-semibold rounded-md text-gray-300 border border-white/10">All Time</button>
+                <label for="historyDay" class="text-sm text-gray-300 sm:ml-3">Past day</label>
+                <input type="date" id="historyDay" class="stats-date text-sm" disabled>
+            </div>
+            <p id="dayNotice" class="hidden mx-auto max-w-6xl mt-3 text-sm text-gray-400" role="status"></p>
+        </section>
+
+        <section class="container px-4 py-8 mx-auto sm:px-6">
+            <div class="mx-auto max-w-6xl p-6 rounded-lg panel-strong">
+                <div class="flex flex-col gap-4 justify-between sm:flex-row sm:items-start">
+                    <div>
+                        <h2 class="text-2xl font-bold font-display text-gold">Player history</h2>
+                        <p id="historyDescription" class="mt-2 text-sm text-gray-400">Daily opt-in installs that started WoW. Today's point updates live.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="flex flex-col gap-1 text-sm text-gray-300" for="historyRange">Show
+                            <select id="historyRange" class="stats-select" disabled>
+                                <option value="7">Last 7 days</option>
+                                <option value="30" selected>Last 30 days</option>
+                                <option value="90">Last 90 days</option>
+                                <option value="all">All history</option>
+                            </select>
+                        </label>
+                        <label class="flex flex-col gap-1 text-sm text-gray-300" for="historyVersion">WoW version
+                            <select id="historyVersion" class="stats-select" disabled>
+                                <option value="">All versions</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div id="historyChart" class="history-chart mt-7" role="group" aria-label="Player history chart"></div>
+                <div id="historyAxis" class="flex justify-between mt-2 text-xs text-gray-400"></div>
+                <p id="historySummary" class="mt-4 text-sm text-gray-300" role="status">Loading history...</p>
+                <p class="mt-2 text-xs text-gray-500">Days use UTC dates. Counts are for opt-in installs; days without reports are omitted. An install that reports two versions on one day can appear in both version filters.</p>
             </div>
         </section>
 
@@ -218,6 +300,7 @@
 
     <script>
         const telemetryStatsUrl = 'https://telemetry.wowsilicon.workers.dev/stats.json';
+        const historyUrl = 'https://telemetry.wowsilicon.workers.dev/history.json';
 
         const realmNames = {
             '151.80.20.84': 'Sirus',
@@ -298,6 +381,9 @@
         let latestStats = null;
         let selectedPeriod = 'today';
         let showAllRealms = false;
+        let historyDays = [];
+        let historyLoaded = false;
+        let selectedDay = '';
 
         function formatNumber(value) {
             return Number(value || 0).toLocaleString();
@@ -394,26 +480,93 @@
                 button.classList.toggle('text-gray-300', !isSelected);
                 button.setAttribute('aria-pressed', String(isSelected));
             }
+            document.getElementById('historyDay').classList.toggle('border-yellow-400', selectedPeriod === 'day');
+        }
+
+        function renderHistory() {
+            const version = document.getElementById('historyVersion').value;
+            const range = document.getElementById('historyRange').value;
+            const liveDate = latestStats?.generated_at?.slice(0, 10);
+            const liveDay = liveDate && /^\d{4}-\d{2}-\d{2}$/.test(liveDate) ? {
+                date: liveDate,
+                unique_events: latestStats.unique_events_today || {},
+                unique_dimensions: latestStats.unique_dimensions_today || {},
+                live: true
+            } : null;
+            const chartDays = liveDay && !version
+                ? [...historyDays.filter(day => day.date !== liveDate), liveDay].sort((a, b) => a.date.localeCompare(b.date))
+                : historyDays;
+            const cutoff = new Date();
+            if (range !== 'all') cutoff.setUTCDate(cutoff.getUTCDate() - Number(range) + 1);
+            const days = range === 'all' ? chartDays : chartDays.filter(day => day.date >= cutoff.toISOString().slice(0, 10));
+            const chart = document.getElementById('historyChart');
+            const axis = document.getElementById('historyAxis');
+            const summary = document.getElementById('historySummary');
+            const description = document.getElementById('historyDescription');
+            description.textContent = version
+                ? `Daily opt-in installs that started WoW and reported version ${version} on that day.`
+                : 'Daily opt-in installs that started WoW. Today\'s point updates live.';
+
+            if (!days.length) {
+                chart.innerHTML = '<p class="self-center text-gray-400">No daily data is available for this range.</p>';
+                axis.textContent = '';
+                summary.textContent = 'No reported days in this range.';
+                return;
+            }
+
+            const counts = days.map(day => version
+                ? Number((day.players_by_wow_version || []).find(row => row.value === version)?.count || 0)
+                : Number(day.unique_events?.wow_start || 0));
+            const max = Math.max(1, ...counts);
+            chart.innerHTML = days.map((day, index) => {
+                const label = `${day.date}: ${formatNumber(counts[index])} players${version ? ` reporting ${version}` : ''}`;
+                const height = counts[index] ? Math.max(2, counts[index] / max * 100) : 0;
+                const target = day.live ? 'data-live="true"' : `data-date="${day.date}"`;
+                return `<div class="history-column"><button type="button" class="history-bar" style="height:${height}%" ${target} title="${escapeHTML(label)}. View this day" aria-label="${escapeHTML(label)}. View this day"></button></div>`;
+            }).join('');
+            chart.setAttribute('aria-label', `${version ? `Players reporting WoW ${version}` : 'Players'} by UTC day, from ${days[0].date} to ${days[days.length - 1].date}`);
+            axis.innerHTML = `<span>${escapeHTML(days[0].date)}</span><span>${escapeHTML(days[days.length - 1].date)}</span>`;
+            summary.textContent = `${formatNumber(days.length)} reported ${days.length === 1 ? 'day' : 'days'} · peak ${formatNumber(max === 1 && counts.every(count => count === 0) ? 0 : max)} players on ${days[counts.indexOf(Math.max(...counts))].date}`;
+        }
+
+        function renderDayOptions() {
+            const input = document.getElementById('historyDay');
+            if (historyDays.length) {
+                input.disabled = false;
+                input.min = historyDays[0].date;
+                input.max = historyDays[historyDays.length - 1].date;
+            }
+            const versions = new Set(historyDays.flatMap(day => (day.players_by_wow_version || []).map(row => row.value)));
+            const select = document.getElementById('historyVersion');
+            const selected = select.value;
+            select.innerHTML = '<option value="">All versions</option>' +
+                [...versions].filter(Boolean).sort().map(value => `<option value="${escapeHTML(value)}">${escapeHTML(value)}</option>`).join('');
+            select.value = selected;
         }
 
         function renderStats() {
             if (!latestStats) return;
 
-            const period = periods[selectedPeriod];
-            const dimensions = periodData(latestStats, period.dimensionsKey);
-            const events = periodData(latestStats, period.eventsKey);
+            const period = periods[selectedPeriod] || periods.today;
+            const day = selectedPeriod === 'day' ? historyDays.find(item => item.date === selectedDay) : null;
+            const dimensions = selectedPeriod === 'day' ? (day?.unique_dimensions || {}) : periodData(latestStats, period.dimensionsKey);
+            const events = selectedPeriod === 'day' ? (day?.unique_events || {}) : periodData(latestStats, period.eventsKey);
 
             document.getElementById('installsCount').textContent = formatNumber(latestStats.anonymous_installs);
             document.getElementById('activeCount').textContent = formatNumber(latestStats.active_now);
-            document.getElementById('launchLabel').textContent = period.launchLabel;
-            document.getElementById('wowStartLabel').textContent = period.wowStartLabel;
-            document.getElementById('launchCount').textContent = formatNumber(events.launch);
-            document.getElementById('wowStartCount').textContent = formatNumber(events.wow_start);
+            document.getElementById('launchLabel').textContent = selectedPeriod === 'day' ? 'Active on this day' : period.launchLabel;
+            document.getElementById('wowStartLabel').textContent = selectedPeriod === 'day' ? 'Played on this day' : period.wowStartLabel;
+            document.getElementById('launchCount').textContent = selectedPeriod === 'day' && !day ? '-' : formatNumber(events.launch);
+            document.getElementById('wowStartCount').textContent = selectedPeriod === 'day' && !day ? '-' : formatNumber(events.wow_start);
 
             for (const element of document.querySelectorAll('.periodTitle')) {
-                element.textContent = period.label;
+                element.textContent = selectedPeriod === 'day' ? selectedDay : period.label;
             }
             updatePeriodControls();
+
+            const notice = document.getElementById('dayNotice');
+            notice.classList.toggle('hidden', selectedPeriod !== 'day' || Boolean(day));
+            if (selectedPeriod === 'day' && !day) notice.textContent = `No data was reported for ${selectedDay}. Choose another day.`;
 
             renderRows('wowVersions', normalizeRows(dimensions.wow_version).slice(0, 10));
             renderRows('appVersions', normalizeRows(dimensions.app_version).slice(0, 10));
@@ -422,7 +575,11 @@
 
             const realmRows = normalizeRows(dimensions.realmlist, mapRealm);
             const displayRealms = showAllRealms ? realmRows : realmRows.slice(0, 10);
-            renderRows('realmlists', displayRealms);
+            if (selectedPeriod === 'day') {
+                document.getElementById('realmlists').innerHTML = '<p class="text-gray-500">Server breakdowns are not provided for past days.</p>';
+            } else {
+                renderRows('realmlists', displayRealms);
+            }
 
             const footer = document.getElementById('realmlistsFooter');
             if (realmRows.length > 10 && !showAllRealms) {
@@ -440,6 +597,8 @@
                 document.getElementById('updatedAt').textContent =
                     `Updated ${new Date(latestStats.generated_at).toLocaleString()} · active window ${latestStats.active_window_minutes || 30} minutes`;
                 renderStats();
+                renderDayOptions();
+                if (historyLoaded) renderHistory();
             } catch (error) {
                 console.error('Error fetching telemetry stats:', error);
                 document.getElementById('updatedAt').textContent = 'Stats are currently unavailable.';
@@ -449,15 +608,59 @@
             }
         }
 
+        async function fetchHistory() {
+            try {
+                const response = await fetch(historyUrl, { cache: 'no-store' });
+                if (!response.ok) throw new Error('History request failed');
+                const history = await response.json();
+                if (!Array.isArray(history.days)) throw new Error('Invalid history response');
+                historyDays = history.days.filter(day => /^\d{4}-\d{2}-\d{2}$/.test(day.date))
+                    .sort((a, b) => a.date.localeCompare(b.date));
+                historyLoaded = true;
+                document.getElementById('historyRange').disabled = false;
+                document.getElementById('historyVersion').disabled = false;
+                renderDayOptions();
+                renderHistory();
+            } catch (error) {
+                console.error('Error fetching telemetry history:', error);
+                document.getElementById('historyDescription').textContent = 'Daily opt-in installs that started WoW.';
+                document.getElementById('historyChart').innerHTML = '<p class="self-center text-gray-400">Player history is unavailable right now.</p>';
+                document.getElementById('historySummary').textContent = 'Past days could not be loaded.';
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             for (const button of document.querySelectorAll('#periodControls [data-period]')) {
                 button.addEventListener('click', () => setSelectedPeriod(button.dataset.period));
             }
+            document.getElementById('historyDay').addEventListener('change', event => {
+                selectedDay = event.target.value;
+                selectedPeriod = 'day';
+                showAllRealms = false;
+                renderStats();
+            });
+            for (const id of ['historyRange', 'historyVersion']) {
+                document.getElementById(id).addEventListener('change', renderHistory);
+            }
+            document.getElementById('historyChart').addEventListener('click', event => {
+                const bar = event.target.closest('[data-date], [data-live]');
+                if (!bar) return;
+                if (bar.dataset.live) {
+                    setSelectedPeriod('today');
+                    return;
+                }
+                selectedDay = bar.dataset.date;
+                document.getElementById('historyDay').value = selectedDay;
+                selectedPeriod = 'day';
+                showAllRealms = false;
+                renderStats();
+            });
             document.getElementById('showMoreRealms').addEventListener('click', () => {
                 showAllRealms = true;
                 renderStats();
             });
             fetchStats();
+            fetchHistory();
         });
     </script>
 </body>
