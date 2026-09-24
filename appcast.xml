@@ -6,6 +6,21 @@
         <description>Release feed for WoWSilicon.</description>
         <language>en</language>
         <item>
+            <title>3.2.2</title>
+            <pubDate>Thu, 24 Sep 2026 23:52:41 +0000</pubDate>
+            <link>https://wowsilicon.github.io/</link>
+            <sparkle:version>30202</sparkle:version>
+            <sparkle:shortVersionString>3.2.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[## Hotfix
+
+- Reverted mtld3d to v0.7.0
+- Restored cursor scaling functionality for DXVK (MoltenVK & KosmicKrisp)
+]]></description>
+            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v3.2.2/WoWSilicon-3.2.2.dmg" length="160097681" type="application/octet-stream" sparkle:edSignature="eqfXQLk72Ldth2uk2W6cqnkVkCYuSiO+v4y9Rg6mQA1lj/gbPFujVmVjHsaedYLud+Y1c5Wg6dwtPRu/z87rCQ=="/>
+        </item>
+        <item>
             <title>3.2.1</title>
             <pubDate>Wed, 23 Sep 2026 10:12:15 +0000</pubDate>
             <link>https://wowsilicon.github.io/</link>
@@ -158,67 +173,6 @@ Supported versions: macOS 15, macOS 26, macOS 27
 - Added permission checks to Troubleshooting
 ]]></description>
             <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v3.0.1/WoWSilicon-3.0.1.dmg" length="150462562" type="application/octet-stream" sparkle:edSignature="Njl8tvZlmrbrgVusiceD5eF61KeoIF6IfaTYbBEpL59XxsOM5qfIHg0uhQZRekjSh2M3qKvllgJ0jLly0nPzBw=="/>
-        </item>
-        <item>
-            <title>2.5.0</title>
-            <pubDate>Sat, 09 May 2026 04:13:14 +0000</pubDate>
-            <link>https://wowsilicon.github.io/</link>
-            <sparkle:version>20500</sparkle:version>
-            <sparkle:shortVersionString>2.5.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# WoWSilicon 2.5.0 is here. A new path.
-
-We have a new name, a new launcher, and the project is once again open source.
-
-## WoWSilicon
-
-- You can now set up your own profiles for 1.12.1, 2.4.3, or 3.3.5a based clients.
-- Allows the launch of third-party launchers.
-- Installed addons are now renamed automatically.
-- Addon lists can now be exported.
-- Reworked the graphics settings section.
-- Added a realmlist tab in the options.
-- The launcher can now auto-update again.
-- Added opt-in telemetry for stats tracking.
-- Added a force quit button.
-
-## CrossOver
-
-- Ships with a custom `ntdll.so` which includes the Tahoe patch and `rosetta_x87_path` environment variable.
-- Dropped CrossOver 25 support.
-
-## New Game Patching Method
-
-- All game versions are sharing the same patching method, which no longer modifies the game binary.
-- Game validation will work properly again.
-- Ascension can now be launched.
-
-## libSiliconPatch for WrathSilicon
-
-- Added 100 new function hooks which accelerate 3D performance.
-- Overall, it delivers around 2x more FPS in crowded areas.
-
-## d9vk
-
-- Fixed a pipeline issue which caused cursor flickering.
-
-## rosettax87_JIT
-
-- Updated to the latest version.
-- macOS 26.5 can be used.
-
-Delete your old `TurtleSilicon.app` and replace it with this one.
-
-As always, drag it into your Applications directory and run:
-
-```sh
-xattr -cr /Applications/WoWSilicon.app
-```
-
-Supported versions: macOS 15, macOS 26
-]]></description>
-            <enclosure url="https://github.com/WoWSilicon/WoWSilicon/releases/download/v2.5.0/WoWSilicon-2.5.0.dmg" length="11884309" type="application/octet-stream" sparkle:edSignature="050FRvOkaPyVKd7A8i3sB4dBq6Cln0GyUsm0GGLYQLa8DD9Bya1FoKMHtKOflucItllaHqDnDWPqBIUCRUbNDA=="/>
         </item>
     </channel>
 </rss>
