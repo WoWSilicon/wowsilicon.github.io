@@ -169,6 +169,16 @@
             </div>
         </section>
 
+        <section class="container px-4 pb-6 mx-auto sm:px-6">
+            <div class="flex flex-wrap items-center justify-between gap-5 mx-auto max-w-6xl p-5 rounded-lg panel-strong">
+                <div>
+                    <h2 class="text-xl font-bold font-display text-gold">Playing now</h2>
+                    <p class="mt-1 text-sm text-gray-400">Opt-in installs reporting a running game in the last 30 minutes. The WoW version filter applies; the date range below is for history.</p>
+                </div>
+                <p class="text-4xl font-semibold text-gold" id="liveCount" aria-live="polite">-</p>
+            </div>
+        </section>
+
         <section class="container px-4 pb-10 mx-auto sm:px-6">
             <div class="grid gap-4 mx-auto max-w-6xl md:grid-cols-4">
                 <article class="p-5 rounded-lg panel-strong">
@@ -311,6 +321,7 @@
     <script>
         const reportUrl = 'https://telemetry.wowsilicon.workers.dev/report.json';
         const historyUrl = 'https://telemetry.wowsilicon.workers.dev/history.json';
+        const liveUrl = 'https://telemetry.wowsilicon.workers.dev/live.json';
 
         const realmNames = {
             '151.80.20.84': 'Sirus',
@@ -367,6 +378,7 @@
         const periodLabels = { today: 'Today', '7': 'Last 7 days', '30': 'Last 30 days',
             '90': 'Last 90 days', month: 'This month', all: 'All time' };
         let currentReport = null;
+        let currentLive = null;
         let selectedPeriod = '30';
         let reportRequest = 0;
         let showAllRealms = false;
@@ -376,6 +388,26 @@
 
         function formatNumber(value) {
             return Number(value || 0).toLocaleString();
+        }
+
+        function renderLive() {
+            const version = document.getElementById('historyVersion').value;
+            document.getElementById('liveCount').textContent = currentLive
+                ? formatNumber(version ? currentLive.by_version?.[version] : currentLive.count)
+                : '-';
+        }
+
+        async function fetchLive() {
+            try {
+                const response = await fetch(liveUrl, { cache: 'no-store' });
+                if (!response.ok) throw new Error('Live request failed');
+                currentLive = await response.json();
+                renderLive();
+            } catch (error) {
+                console.error('Error fetching live telemetry:', error);
+                currentLive = null;
+                renderLive();
+            }
         }
 
         function normalizeRows(rows, mapper = value => value) {
@@ -659,6 +691,7 @@
             });
             document.getElementById('historyVersion').addEventListener('change', () => {
                 showAllRealms = false;
+                renderLive();
                 renderHistory();
                 fetchReport();
             });
@@ -679,6 +712,8 @@
             });
             fetchHistory();
             fetchReport();
+            fetchLive();
+            window.setInterval(fetchLive, 60 * 1000);
         });
     </script>
 </body>
