@@ -65,6 +65,160 @@
             border: 1px solid rgba(214, 189, 112, 0.22);
         }
 
+        .stats-overview {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(16rem, 21rem);
+            gap: 2.5rem;
+            align-items: end;
+            padding: 2.25rem 0 2rem;
+        }
+
+        .stats-overview h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.08;
+            letter-spacing: -0.035em;
+        }
+
+        .stats-live {
+            padding: 0.5rem 0 0.5rem 1.75rem;
+            border-left: 1px solid rgba(214, 189, 112, 0.4);
+        }
+
+        .stats-live-label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #d4dded;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .stats-live-dot {
+            width: 0.55rem;
+            height: 0.55rem;
+            flex: 0 0 auto;
+            border-radius: 50%;
+            background: #61d3a4;
+            box-shadow: 0 0 0 4px rgba(97, 211, 164, 0.12);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .stats-live-dot { animation: none; }
+        }
+
+        .stats-live-number {
+            margin: 0.3rem 0 0.15rem;
+            color: #e8cb7a;
+            font-size: clamp(3.5rem, 6vw, 5.25rem);
+            font-weight: 600;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stats-filters {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem 1.5rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(139, 188, 255, 0.2);
+            border-radius: 0.75rem;
+            background: rgba(8, 15, 29, 0.8);
+        }
+
+        .stats-periods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.2rem;
+        }
+
+        .stats-periods button {
+            padding: 0.55rem 0.8rem;
+            border-radius: 0.4rem;
+            color: #aebbd0;
+            font-size: 0.875rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .stats-periods button:hover {
+            color: #fff;
+            background: rgba(139, 188, 255, 0.1);
+        }
+
+        .stats-periods button[aria-pressed="true"] {
+            color: #f8e3a4;
+            background: rgba(214, 189, 112, 0.16);
+        }
+
+        .stats-filter-fields {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem 1.25rem;
+            margin-left: auto;
+        }
+
+        .stats-filter-fields label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #aebbd0;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .stats-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            margin-top: 1rem;
+            border: 1px solid rgba(139, 188, 255, 0.18);
+            border-radius: 0.75rem;
+            background: rgba(8, 15, 29, 0.48);
+        }
+
+        .stats-metrics article {
+            min-width: 0;
+            padding: 1.15rem 1.35rem;
+        }
+
+        .stats-metrics article + article {
+            border-left: 1px solid rgba(139, 188, 255, 0.14);
+        }
+
+        .stats-metrics p:first-child {
+            color: #aebbd0;
+            font-size: 0.8rem;
+        }
+
+        .stats-metrics p:last-child {
+            margin-top: 0.3rem;
+            color: #e8cb7a;
+            font-size: clamp(1.6rem, 2.6vw, 2.15rem);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stats-history-section {
+            padding-top: 1.5rem;
+            padding-bottom: 2rem;
+        }
+
+        @media (max-width: 800px) {
+            .stats-overview { grid-template-columns: 1fr; gap: 1.5rem; }
+            .stats-live { border-left: 0; border-top: 1px solid rgba(214, 189, 112, 0.4); padding: 1rem 0 0; }
+            .stats-filter-fields { margin-left: 0; }
+        }
+
+        @media (max-width: 580px) {
+            .stats-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stats-metrics article:nth-child(3) { border-left: 0; border-top: 1px solid rgba(139, 188, 255, 0.14); }
+            .stats-metrics article:nth-child(4) { border-top: 1px solid rgba(139, 188, 255, 0.14); }
+            .stats-filters { padding: 0.85rem; }
+            .stats-periods { width: 100%; }
+            .stats-periods button { flex: 1 1 auto; }
+        }
+
         .bar-track {
             background: rgba(139, 188, 255, 0.12);
         }
@@ -156,76 +310,66 @@
     </header>
 
     <main>
-        <section class="container px-4 pt-8 pb-10 mx-auto sm:px-6 lg:pt-14">
-            <div class="mx-auto max-w-6xl">
-                <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-accent">Anonymous telemetry</p>
-                <h1 class="mb-5 text-4xl font-bold leading-tight sm:text-5xl md:text-6xl font-display text-gold">
-                    WoWSilicon Stats</h1>
-                <p class="max-w-3xl text-lg leading-8 text-gray-300">
-                    These numbers come from users who opted in to anonymous usage statistics. The launcher does not send
-                    IP addresses, usernames, account names, character names, file paths, or hardware identifiers.
-                </p>
-                <p class="mt-4 text-sm text-gray-500" id="updatedAt">Loading stats...</p>
-            </div>
-        </section>
-
-        <section class="container px-4 pb-6 mx-auto sm:px-6">
-            <div class="flex flex-wrap items-center justify-between gap-5 mx-auto max-w-6xl p-5 rounded-lg panel-strong">
+        <section class="container px-4 mx-auto sm:px-6">
+            <div class="mx-auto max-w-6xl stats-overview">
                 <div>
-                    <h2 class="text-xl font-bold font-display text-gold">Playing now</h2>
-                    <p class="mt-1 text-sm text-gray-400">Opt-in installs reporting a running game in the last 30 minutes. The WoW version filter applies; the date range below is for history.</p>
+                    <h1 class="font-display text-gold">WoWSilicon Stats</h1>
+                    <p class="mt-4 max-w-2xl text-base leading-7 text-gray-300">A view of the players who share anonymous usage statistics.</p>
+                    <p class="mt-4 text-sm text-gray-400" id="updatedAt">Loading stats...</p>
                 </div>
-                <p class="text-4xl font-semibold text-gold" id="liveCount" aria-live="polite">-</p>
+                <div class="stats-live">
+                    <h2 class="stats-live-label"><span class="stats-live-dot animate-pulse" aria-hidden="true"></span>Playing now</h2>
+                    <p class="stats-live-number" id="liveCount" aria-live="polite">-</p>
+                    <p class="text-sm leading-6 text-gray-400">Opt-in installs seen in the last 30 minutes. The version filter applies.</p>
+                </div>
             </div>
         </section>
 
-        <section class="container px-4 pb-10 mx-auto sm:px-6">
-            <div class="grid gap-4 mx-auto max-w-6xl md:grid-cols-4">
-                <article class="p-5 rounded-lg panel-strong">
-                    <p class="text-sm uppercase tracking-wide text-gray-500">Opened launcher</p>
-                    <p class="mt-2 text-3xl font-semibold text-gold" id="installsCount">-</p>
-                </article>
-                <article class="p-5 rounded-lg panel-strong">
-                    <p class="text-sm uppercase tracking-wide text-gray-500">Started WoW</p>
-                    <p class="mt-2 text-3xl font-semibold text-gold" id="activeCount">-</p>
-                </article>
-                <article class="p-5 rounded-lg panel-strong">
-                    <p class="text-sm uppercase tracking-wide text-gray-500" id="launchLabel">Days with players</p>
-                    <p class="mt-2 text-3xl font-semibold text-gold" id="launchCount">-</p>
-                </article>
-                <article class="p-5 rounded-lg panel-strong">
-                    <p class="text-sm uppercase tracking-wide text-gray-500" id="wowStartLabel">Peak day</p>
-                    <p class="mt-2 text-3xl font-semibold text-gold" id="wowStartCount">-</p>
-                </article>
+        <section class="container px-4 mx-auto sm:px-6">
+            <div class="mx-auto max-w-6xl">
+                <div class="stats-filters" id="periodControls" aria-label="Stats filters">
+                    <div class="stats-periods" role="group" aria-label="Time range">
+                        <button type="button" data-period="today">Today</button>
+                        <button type="button" data-period="7">7 days</button>
+                        <button type="button" data-period="30" aria-pressed="true">30 days</button>
+                        <button type="button" data-period="90">90 days</button>
+                        <button type="button" data-period="month">This month</button>
+                        <button type="button" data-period="all">All time</button>
+                    </div>
+                    <div class="stats-filter-fields">
+                        <label for="historyDay">Past day
+                            <input type="date" id="historyDay" class="stats-date text-sm" disabled>
+                        </label>
+                        <label for="historyVersion">WoW version
+                            <select id="historyVersion" class="stats-select" disabled>
+                                <option value="">All versions</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <p id="dayNotice" class="hidden mt-3 text-sm text-gray-400" role="status"></p>
+                <div class="stats-metrics" aria-label="Selected period totals">
+                    <article>
+                        <p>Opened launcher</p>
+                        <p id="installsCount">-</p>
+                    </article>
+                    <article>
+                        <p>Started WoW</p>
+                        <p id="activeCount">-</p>
+                    </article>
+                    <article>
+                        <p id="launchLabel">Average players / day</p>
+                        <p id="launchCount">-</p>
+                    </article>
+                    <article>
+                        <p id="wowStartLabel">Peak day</p>
+                        <p id="wowStartCount">-</p>
+                    </article>
+                </div>
             </div>
         </section>
 
-        <section class="container px-4 pb-4 mx-auto sm:px-6">
-            <div class="flex flex-wrap items-center gap-2 mx-auto max-w-6xl" id="periodControls" aria-label="Stats period">
-                <button type="button" data-period="today"
-                    class="px-4 py-2 text-sm font-semibold rounded-md text-gray-300 border border-white/10">Today</button>
-                <button type="button" data-period="7"
-                    class="px-4 py-2 text-sm font-semibold rounded-md text-gray-300 border border-white/10">7 days</button>
-                <button type="button" data-period="30"
-                    class="px-4 py-2 text-sm font-semibold rounded-md bg-white/10 text-white border border-white/10">30 days</button>
-                <button type="button" data-period="90"
-                    class="px-4 py-2 text-sm font-semibold rounded-md text-gray-300 border border-white/10">90 days</button>
-                <button type="button" data-period="month"
-                    class="px-4 py-2 text-sm font-semibold rounded-md text-gray-300 border border-white/10">This Month</button>
-                <button type="button" data-period="all"
-                    class="px-4 py-2 text-sm font-semibold rounded-md text-gray-300 border border-white/10">All Time</button>
-                <label for="historyDay" class="text-sm text-gray-300 sm:ml-3">Past day</label>
-                <input type="date" id="historyDay" class="stats-date text-sm" disabled>
-                <label class="flex items-center gap-2 text-sm text-gray-300 sm:ml-auto" for="historyVersion">WoW version
-                    <select id="historyVersion" class="stats-select" disabled>
-                        <option value="">All versions</option>
-                    </select>
-                </label>
-            </div>
-            <p id="dayNotice" class="hidden mx-auto max-w-6xl mt-3 text-sm text-gray-400" role="status"></p>
-        </section>
-
-        <section class="container px-4 py-8 mx-auto sm:px-6">
+        <section class="container px-4 mx-auto sm:px-6 stats-history-section">
             <div class="mx-auto max-w-6xl p-6 rounded-lg panel-strong">
                 <div class="flex flex-col gap-4 justify-between sm:flex-row sm:items-start">
                     <div>
@@ -287,13 +431,14 @@
             </div>
         </section>
 
-        <section class="container px-4 py-8 mx-auto sm:px-6">
+        <section id="privacy" class="container px-4 py-8 mx-auto sm:px-6">
             <div class="mx-auto max-w-6xl p-6 rounded-lg panel">
                 <h2 class="mb-4 text-2xl font-bold font-display text-gold">Privacy</h2>
                 <p class="leading-7 text-gray-300">
                     Telemetry is optional in the launcher. It is used for public aggregate stats only and can be turned
                     off in Options at any time. Public stats use app version, WoW version, renderer, macOS version,
-                    and the configured realmlist value. Daily charts count each anonymous install once per day;
+                    and the configured realmlist value. The launcher does not send IP addresses, usernames, account
+                    names, character names, file paths, or hardware identifiers. Daily charts count each anonymous install once per day;
                     selected-period totals count each install once per reported value across that period.
                 </p>
             </div>
@@ -494,9 +639,6 @@
         function updatePeriodControls() {
             for (const button of document.querySelectorAll('#periodControls [data-period]')) {
                 const isSelected = button.dataset.period === selectedPeriod;
-                button.classList.toggle('bg-white/10', isSelected);
-                button.classList.toggle('text-white', isSelected);
-                button.classList.toggle('text-gray-300', !isSelected);
                 button.setAttribute('aria-pressed', String(isSelected));
             }
             document.getElementById('historyDay').classList.toggle('border-yellow-400', selectedPeriod === 'day');
@@ -586,7 +728,8 @@
                 : Number(day.unique_events?.wow_start || 0));
             document.getElementById('installsCount').textContent = formatNumber(events.launch);
             document.getElementById('activeCount').textContent = formatNumber(events.wow_start);
-            document.getElementById('launchCount').textContent = formatNumber(counts.filter(Boolean).length);
+            document.getElementById('launchCount').textContent = formatNumber(
+                counts.length ? Math.round(counts.reduce((total, count) => total + count, 0) / counts.length) : 0);
             document.getElementById('wowStartCount').textContent = formatNumber(Math.max(0, ...counts));
             const periodLabel = selectedPeriod === 'day' ? selectedDay : periodLabels[selectedPeriod];
             for (const element of document.querySelectorAll('.periodTitle')) element.textContent = periodLabel;
